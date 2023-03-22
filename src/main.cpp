@@ -4,6 +4,7 @@
 #include "Flywheel.hpp"
 #include "Robot.hpp"
 #include "Intake.hpp"
+#include "Catapult.hpp"
 
 #include "main.hpp"
 #include "ports.hpp"
@@ -39,14 +40,13 @@ void opcontrol() {
 	Intake const intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
 	Expansion const expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
 	Roller const roller { ports::ROLLER };
-	Robot robot{ drivetrain, flywheel, intake, expansion, roller};
+	Catapult const catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH_CATAPULT};
+	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 
 	while (true) {
 		robot.update();
 		pros::Task::delay(1);
 	}
-
-
 }
 
 
