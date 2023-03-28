@@ -11,9 +11,11 @@ Drivetrain::Drivetrain(int8_t const left_back_motor_port, int8_t const right_bac
 	, m_right_front_motor{ right_front_motor_port } {}
 
 static float scale(float const raw) {
-	return std::pow(raw / constants::CONTROLLER_ANALOG_MAX, 3.0f) * constants::DRIVE_MAX_VELOCITY * constants::DRIVE_DAMPENING;
+	return std::pow(raw / constants::CONTROLLER_ANALOG_MAX, 3.0f) * constants::DRIVE_MAX_VOLTAGE * constants::DRIVE_DAMPENING;
 }
 
+// do we need to change drive dampening bc we're using voltage instead of drive? ^^
+// do we need dampening???? 
 void Drivetrain::update(int32_t forward_backward_axis_int, int32_t left_right_axis_int) {
 	switch (m_reference_frame) {
 		case DrivetrainReferenceFrame::IntakeAtFront:
@@ -30,14 +32,14 @@ void Drivetrain::update(int32_t forward_backward_axis_int, int32_t left_right_ax
 	forward_backward_axis = scale(forward_backward_axis);
 	left_right_axis = scale(left_right_axis);
 
-	auto const left_velocity = static_cast<int32_t>(forward_backward_axis - left_right_axis);
-	auto const right_velocity = static_cast<int32_t>(forward_backward_axis + left_right_axis);
+	auto const left_voltage = static_cast<int32_t>(forward_backward_axis - left_right_axis);
+	auto const right_voltage = static_cast<int32_t>(forward_backward_axis + left_right_axis);
+ 
+	m_left_back_motor.move_voltage(left_voltage); // 600 with blue motors
+	m_left_front_motor.move_voltage(left_voltage);
 
-	m_left_back_motor.move_velocity(left_velocity);
-	m_left_front_motor.move_velocity(left_velocity);
-
-	m_right_back_motor.move_velocity(right_velocity);
-	m_right_front_motor.move_velocity(right_velocity);
+	m_right_back_motor.move_voltage(right_voltage);
+	m_right_front_motor.move_voltage(right_voltage);
 }
 
 void Drivetrain::next_reference_frame() {

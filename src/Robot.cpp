@@ -15,21 +15,6 @@ void Robot::update_drivetrain() {
 	}
 }
 
-// void Robot::update_flywheel() {
-// 	int32_t temp_voltage = m_flywheel.m_voltage;
-
-// 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
-// 		m_flywheel.aim(0);
-// 	} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
-// 		m_flywheel.aim(1);
-// 	} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
-// 		m_flywheel.shoot();
-// 	}
-
-// 	if ((temp_voltage == 0 && (m_flywheel.m_voltage > 0)) || (temp_voltage > 0 && (m_flywheel.m_voltage == 0))) {
-// 		m_drivetrain.next_reference_frame();
-// 	}
-// }
 
 void Robot::update_intake() {
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {

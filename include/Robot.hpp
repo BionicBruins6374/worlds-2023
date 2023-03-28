@@ -3,7 +3,6 @@
 #include "pros/misc.hpp"
 
 #include "Drivetrain.hpp"
-#include "Flywheel.hpp"
 #include "Intake.hpp"
 #include "Expansion.hpp"
 #include "Roller.hpp"

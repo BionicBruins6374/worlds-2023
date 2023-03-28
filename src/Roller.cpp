@@ -30,13 +30,22 @@ void Roller::fine_adjust(RollerCode code) {
 }
 
 void Roller::spin_wheel(double scaler) {
+	// If motor previously on, turn it off
 	if (m_on) {
 		m_motor.move_velocity(0);
 		m_on = false;
 	}
 
+	// If motor off, turn it on 
 	else {
 		m_motor.move_velocity(100 * scaler);
 		m_on = true;
 	}
 }
+
+
+
+
+
+
+
