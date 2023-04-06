@@ -22,5 +22,5 @@ constexpr int8_t INTAKE_RIGHT = 5;
 constexpr int8_t ROLLER = 19;
 
 constexpr int8_t CATAPULT_MOTOR = 4; // TODO: CHANGE THIS
-constexpr uint8_t LIMIT_SWITCH_CATAPULT = 'D';
+constexpr uint8_t POTENTIOMETER = 'D';
 }  // namespace ports

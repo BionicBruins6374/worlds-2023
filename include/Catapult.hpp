@@ -6,9 +6,9 @@
 class Catapult {
 private:
 	pros::Motor m_motor;
-	pros::ADIDigitalIn m_limit_switch;
+	pros::ADIDigitalIn potentiometer;
 
 public:
     Catapult(int8_t left_back_motor_port, std::uint8_t port); 
-	void spin_motor(int voltage_option);
+	void spin_motor(int voltage_option, int shift_amount);
 };
