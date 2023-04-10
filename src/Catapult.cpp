@@ -24,13 +24,16 @@ void Catapult::spin_motor(int voltage_option=0, int shift_amount=500) {
 }
 
 void Catapult::spin_motor_no_limit(double shift_amount) {
+    std::printf("spin motor called");
     m_motor.set_encoder_units(pros::motor_encoder_units_e_t::E_MOTOR_ENCODER_ROTATIONS);
     // std::printf(m_motor.get_position());
     m_motor.move_relative(shift_amount, 200);
     // m_motor.move_voltage(0);
+    
 }
 
 void Catapult::set_voltage(double voltage) {
+    std::printf("set voltage called");
     m_motor.move_voltage(voltage);
 }
 

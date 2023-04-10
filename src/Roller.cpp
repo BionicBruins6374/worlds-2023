@@ -40,6 +40,27 @@ void Roller::spin_wheel(double scaler) {
 	}
 }
 
+void Roller::turn_off() {
+	m_on = false;
+	m_motor.move_velocity(0);
+}
+
+void Roller::optical_spin() {
+	return;
+}
+
+void Roller::main_spin_roller(RollerType type )  {
+	switch (type) {
+		case OPTICAL:
+
+			break;
+		case MANUAL_CONTROL:
+			spin_wheel(1);
+			break;
+		
+	}
+}
+
 
 
 

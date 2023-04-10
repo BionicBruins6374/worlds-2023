@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pros/misc.h"
 #include "pros/misc.hpp"
 
 #include "Drivetrain.hpp"
@@ -12,6 +13,7 @@
 class Robot {
 private:
 	pros::Controller m_controller{ pros::E_CONTROLLER_MASTER };
+	pros::Controller m_controller_partner { pros::E_CONTROLLER_PARTNER };
 	Drivetrain m_drivetrain;
 	Intake m_intake;
 	Expansion m_expansion;

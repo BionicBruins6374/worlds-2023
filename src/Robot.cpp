@@ -1,7 +1,6 @@
 #include "pros/misc.h"
 #include <iostream>
 #include "Robot.hpp"
-#include "Catapult.hpp"
 
 Robot::Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller roller, Catapult catapult)
 	: m_drivetrain(drivetrain), m_intake(intake), m_expansion(expansion), m_roller(roller), m_catapult(catapult) {}
@@ -15,9 +14,11 @@ void Robot::update_drivetrain() {
 }
 void Robot::update_intake() {
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+		std::printf("L1 Pressed");
 		m_intake.toggle(false);
 	}
 	else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+		std::printf("L2 Pressed");
 		m_intake.toggle(true);
 	}
 }
@@ -27,6 +28,15 @@ void Robot::update_expansion() {
 	}
 }
 void Robot::update_roller() {
+	// switch from optical sensor to toggle roller
+	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
+
+	}
+
+	// turn off roller 
+	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+		
+	}
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
 		m_roller.spin_wheel(1); 
 	}
@@ -42,6 +52,7 @@ void Robot::update_roller() {
 void Robot::update_catapult() {
 	// to shoot it, already in launch position 
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
+		std::printf("X pressed");
 		// launches catapult forward
 		// m_catapult.spin_motor(0, 2030); // poten. gives vals [0, 4090]
 		m_catapult.spin_motor_no_limit(-11.8);
@@ -53,9 +64,11 @@ void Robot::update_catapult() {
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
 		// m_catapult.spin_motor(0, 250);
 		// m_catapult.spin_motor_no_limit(0.2);// bc we're moving 12/60 of the input driver (slip) gear teeth
+		std::printf("R1 pressed");
 		m_catapult.set_voltage(5000);
 	}
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
+		std::printf("R2 pressed");
 		m_catapult.set_voltage(0);
 	}
 }

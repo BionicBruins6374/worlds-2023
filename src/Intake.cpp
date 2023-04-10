@@ -4,12 +4,12 @@ Intake::Intake(int8_t const left_port, int8_t const right_port) : m_left_motor{ 
 m_right_motor{ right_port, true } {}
 void Intake::set_on(bool value) {
 	m_on = value;
-	auto velocity = 0;
+	int velocity = 0;
 	if (m_on) {
 		velocity = reverse_velocity(constants::INTAKE_VELOCITY);
 	}
-	m_left_motor.move_velocity(320);
-	// m_right_motor.move_velocity(velocity);
+	m_left_motor.move_velocity(velocity);
+	m_right_motor.move_velocity(velocity);
 }
 
 void Intake::toggle(bool const reverse) {

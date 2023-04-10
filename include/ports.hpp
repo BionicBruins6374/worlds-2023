@@ -17,10 +17,10 @@ constexpr int8_t RIGHT_BACK_MOTOR = 1;
 constexpr int8_t LEFT_FRONT_MOTOR = 10;
 constexpr int8_t RIGHT_FRONT_MOTOR = 9;
 constexpr int8_t LEFT_MIDDLE_MOTOR = 12;
-constexpr int8_t RIGHT_MIDDLE_MOTOR = 13;
+constexpr int8_t RIGHT_MIDDLE_MOTOR = 3;
 
 constexpr int8_t INTAKE_LEFT = 13;
-constexpr int8_t INTAKE_RIGHT = 13;
+constexpr int8_t INTAKE_RIGHT = 5;
 
 constexpr int8_t ROLLER = 19;
 
