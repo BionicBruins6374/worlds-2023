@@ -49,17 +49,28 @@ void Roller::optical_spin() {
 	return;
 }
 
-void Roller::main_spin_roller(RollerType type )  {
-	switch (type) {
-		case OPTICAL:
-
-			break;
-		case MANUAL_CONTROL:
-			spin_wheel(1);
-			break;
-		
+void Roller::switch_type() {
+	if (roller_type == OPTICAL) {
+		roller_type = MANUAL_CONTROL;
+	}
+	else {
+		roller_type = OPTICAL;
 	}
 }
+void Roller::main_spin_roller(int scaler )  {
+	switch (roller_type) {
+		case OPTICAL:
+			optical_spin();
+			break;
+		case MANUAL_CONTROL:
+			spin_wheel(scaler);
+			break;	
+	}
+}
+
+
+
+
 
 
 

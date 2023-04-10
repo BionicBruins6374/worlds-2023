@@ -28,23 +28,21 @@ void Robot::update_expansion() {
 	}
 }
 void Robot::update_roller() {
-	// switch from optical sensor to toggle roller
-	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
-
+	// switch from optical sensor to roller when primary controller tries to use roller
+	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+		m_roller.switch_type();
 	}
-
 	// turn off roller 
 	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-		
+		m_roller.turn_off();
 	}
+	
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-		m_roller.spin_wheel(1); 
+		m_roller.main_spin_roller( 1);
 	}
+
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-		m_roller.spin_wheel(-1); 
-	}
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
-		m_roller.switch_color();
+		m_roller.main_spin_roller( -1);
 	}
 }
 
