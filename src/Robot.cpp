@@ -43,13 +43,16 @@ void Robot::update_catapult() {
 	// to shoot it, already in launch position 
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
 		// launches catapult forward
-		m_catapult.spin_motor(0, 2030); // poten. gives vals [0, 4090]
+		// m_catapult.spin_motor(0, 2030); // poten. gives vals [0, 4090]
+		m_catapult.spin_motor_no_limit(-11.8);
 		// moves it back to loading position
-		m_catapult.spin_motor(1, 2030);
+		// m_catapult.spin_motor(1, 2030);
+		m_catapult.spin_motor_no_limit(-11.8);
 	}
 	// presumably used to set it to load position
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
-		m_catapult.spin_motor(0, 500);
+		// m_catapult.spin_motor(0, 250);
+		m_catapult.spin_motor_no_limit(-11.8);
 	}
 }
 void Robot::update() {

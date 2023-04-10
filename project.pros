@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "farRollerFinal2",
+    "project_name": "test1",
     "target": "v5",
     "templates": {
       "kernel": {

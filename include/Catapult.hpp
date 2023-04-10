@@ -11,4 +11,5 @@ private:
 public:
     Catapult(int8_t left_back_motor_port, std::uint8_t port); 
 	void spin_motor(int voltage_option, int shift_amount);
+	void spin_motor_no_limit(double shift_amount);
 };
