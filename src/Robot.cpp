@@ -52,7 +52,11 @@ void Robot::update_catapult() {
 	// presumably used to set it to load position
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
 		// m_catapult.spin_motor(0, 250);
-		m_catapult.spin_motor_no_limit(-11.8);
+		// m_catapult.spin_motor_no_limit(0.2);// bc we're moving 12/60 of the input driver (slip) gear teeth
+		m_catapult.set_voltage(5000);
+	}
+	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
+		m_catapult.set_voltage(0);
 	}
 }
 void Robot::update() {
