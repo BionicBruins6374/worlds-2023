@@ -27,4 +27,7 @@ int32_t Intake::reverse_velocity(int32_t const velocity) const {
 	return velocity;
 }
 
+int32_t Intake::get_temp()  {
+	return m_left_motor.get_temperature();
+}
 

@@ -24,6 +24,7 @@ private:
 	void update_expansion();
 	void update_roller();
 	void update_catapult();
+	void update_controller(); 
 public:
 
 	Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller roller, Catapult catapult);

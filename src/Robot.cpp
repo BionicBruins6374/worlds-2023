@@ -4,6 +4,10 @@
 
 Robot::Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller roller, Catapult catapult)
 	: m_drivetrain(drivetrain), m_intake(intake), m_expansion(expansion), m_roller(roller), m_catapult(catapult) {}
+
+void Robot::update_controller() {
+	m_controller_partner.print(1,1, "Intake Motor Temp: %f", m_intake.get_temp());
+}
 void Robot::update_drivetrain() {
 	m_drivetrain.update(m_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), m_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
@@ -28,20 +32,17 @@ void Robot::update_expansion() {
 	}
 }
 void Robot::update_roller() {
+	
 	// switch from optical sensor to roller when primary controller tries to use roller
 	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
 		m_roller.switch_type();
 	}
-	// turn off roller 
-	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-		m_roller.turn_off();
-	}
 	
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
 		m_roller.main_spin_roller( 1);
 	}
 
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
+	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
 		m_roller.main_spin_roller( -1);
 	}
 }

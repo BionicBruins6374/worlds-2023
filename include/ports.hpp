@@ -22,7 +22,7 @@ constexpr int8_t RIGHT_MIDDLE_MOTOR = 3;
 constexpr int8_t INTAKE_LEFT = 13;
 constexpr int8_t INTAKE_RIGHT = 5;
 
-constexpr int8_t ROLLER = 19;
+constexpr int8_t ROLLER = 13;
 
 constexpr int8_t CATAPULT_MOTOR = 4; // TODO: CHANGE THIS
 constexpr uint8_t POTENTIOMETER = 'D';
