@@ -13,4 +13,5 @@ public:
 	Expansion(uint8_t const piston_left, uint8_t const piston_right);
 
 	void trigger();
+	void press_trigger(); 
 };
