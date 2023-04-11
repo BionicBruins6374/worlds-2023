@@ -1,7 +1,7 @@
 #include "Roller.hpp"
 #include "constants.hpp"
 
-Roller::Roller(int8_t const port) : m_motor{ port } {
+Roller::Roller(int8_t const port) : m_motor{ port, pros::E_MOTOR_GEAR_BLUE } {
 	m_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
 }
 void Roller::switch_color() const {

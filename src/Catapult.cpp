@@ -10,7 +10,7 @@
 #include "constants.hpp"
 
 Catapult::Catapult(int8_t motor_port, std::uint8_t port )
-	: m_motor{ motor_port, true }
+	: m_motor{ motor_port, pros::E_MOTOR_GEAR_RED, true }
     , potentiometer { port } {}
 
 // spins gear clockwise until it touches the limit switch again

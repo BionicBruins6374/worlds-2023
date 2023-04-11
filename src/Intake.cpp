@@ -1,7 +1,7 @@
 #include "Intake.hpp"
 #include "constants.hpp"
 Intake::Intake(int8_t const left_port, int8_t const right_port) : m_left_motor{ left_port }, 
-m_right_motor{ right_port, true } {}
+m_right_motor{ right_port, pros::E_MOTOR_GEAR_BLUE, true } {}
 void Intake::set_on(bool value) {
 	m_on = value;
 	int velocity = 0;

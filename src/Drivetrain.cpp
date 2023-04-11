@@ -5,12 +5,12 @@
 #include "constants.hpp"
 
 Drivetrain::Drivetrain(int8_t const left_back_motor_port, int8_t const right_back_motor_port, int8_t const left_front_motor_port, int8_t const right_front_motor_port, int8_t const right_middle_motor_port, int8_t const left_middle_motor_port)
-	: m_left_back_motor{ left_back_motor_port, true }
-	, m_right_back_motor{ right_back_motor_port }
-	, m_left_front_motor{ left_front_motor_port, true }
-	, m_right_front_motor{ right_front_motor_port }
-	, m_right_middle_motor { right_middle_motor_port, true}
-	, m_left_middle_motor { left_middle_motor_port} // does need to be reversed?
+	: m_left_back_motor{ left_back_motor_port, pros::E_MOTOR_GEAR_BLUE, true }
+	, m_right_back_motor{ right_back_motor_port, pros::E_MOTOR_GEAR_BLUE }
+	, m_left_front_motor{ left_front_motor_port, pros::E_MOTOR_GEAR_BLUE, true }
+	, m_right_front_motor{ right_front_motor_port, pros::E_MOTOR_GEAR_BLUE }
+	, m_right_middle_motor { right_middle_motor_port, pros::E_MOTOR_GEAR_BLUE, true}
+	, m_left_middle_motor { left_middle_motor_port, pros::E_MOTOR_GEAR_BLUE} // does need to be reversed?
 	 {}
 
 static float scale(float const raw) {
