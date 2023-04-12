@@ -36,7 +36,7 @@ void Robot::update_expansion() {
 
 	
 }
-void Robot::update_roller() {
+void Robot::update_roller(std::string color) {
 	
 	// switch from optical sensor to roller when primary controller tries to use roller
 	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
@@ -44,11 +44,11 @@ void Robot::update_roller() {
 	}
 	
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
-		m_roller.main_spin_roller( 1);
+		m_roller.main_spin_roller( 1, color);
 	}
 
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_DOWN)) {
-		m_roller.main_spin_roller( -1);
+		m_roller.main_spin_roller( -1, color);
 	}
 }
 
@@ -75,10 +75,10 @@ void Robot::update_catapult() {
 		m_catapult.set_voltage(0);
 	}
 }
-void Robot::update() {
+void Robot::update(std::string color) {
 	update_drivetrain();
 	update_intake();
 	update_expansion();
-	update_roller();
+	update_roller(color);
 	update_catapult();
 }

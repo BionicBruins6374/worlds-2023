@@ -54,7 +54,7 @@ void opcontrol() {
 	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 
 	while (true) {
-		robot.update();
+		robot.update(buttonText);
 		pros::Task::delay(1);
 	}
 }
