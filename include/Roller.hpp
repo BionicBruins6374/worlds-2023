@@ -2,11 +2,15 @@
 
 #include <cstdint>
 #include "pros/motors.hpp"
+#include "pros/optical.hpp"
 
 class Roller {
 private:
 	pros::Motor m_motor;
 	bool m_on = false;
+	pros::Optical optical_front;
+	pros::Optical optical_side;
+	bool blue_alliance;
 
 public:
 	enum RollerCode {
@@ -23,7 +27,7 @@ public:
 
 	RollerType roller_type = OPTICAL;
 
-	Roller(int8_t const port);
+	Roller(int8_t const port, bool redOrBlue, int8_t optical_front_port, int8_t optical_side_port);
 	void switch_color() const;
 	void fine_adjust(RollerCode code);
 	void spin_wheel(double scaler) ;	

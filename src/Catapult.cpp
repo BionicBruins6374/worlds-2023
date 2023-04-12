@@ -19,9 +19,7 @@ void Catapult::spin_motor(int voltage_option) {
     while (m_limit_switch.get_value() == 0) {// check this
         m_motor.move_voltage(-1 * constants::CATAPULT_VOLTAGE[voltage_option]);
     } 
-
 }
-
 
 
 void Catapult::spin_motor_no_limit(double shift_amount) {
@@ -30,15 +28,11 @@ void Catapult::spin_motor_no_limit(double shift_amount) {
     // std::printf(m_motor.get_position());
     m_motor.move_relative(shift_amount, 200);
     // m_motor.move_voltage(0);
-    
 }
-
 void Catapult::set_voltage(double voltage) {
     std::printf("set voltage called");
     m_motor.move_voltage(voltage);
 }
-
-
 
 // get initial pot value
 // while new pot value != pot value + x amnt (1000)

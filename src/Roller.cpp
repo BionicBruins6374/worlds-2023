@@ -1,8 +1,14 @@
 #include "Roller.hpp"
 #include "constants.hpp"
+#include "pros/optical.hpp"
 
-Roller::Roller(int8_t const port) : m_motor{ port, pros::E_MOTOR_GEAR_BLUE } {
+Roller::Roller(int8_t const port, bool redOrBlue, int8_t optical_front_port, int8_t optical_side_port) : 
+m_motor{ port, pros::E_MOTOR_GEAR_BLUE }
+, optical_front(optical_front_port)
+, optical_side(optical_side_port )
+ {
 	m_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+	blue_alliance = redOrBlue;
 }
 void Roller::switch_color() const {
 	// moves motor 180 degrees forward at a fast pace (switches roller color)
@@ -46,8 +52,36 @@ void Roller::turn_off() {
 }
 
 void Roller::optical_spin() {
-	return;
+	if (blue_alliance ) {
+		while (true) {
+			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
+      			m_motor.move_velocity(100);
+				pros::Task::delay(5);
+    		} 
+			else {
+      			m_motor.move_velocity(0);
+				return;
+    		}
+		}
+	}
+
+	else if (!blue_alliance) {
+		while (true) {
+			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
+				m_motor.move_velocity(100);
+				pros::Task::delay(5);
+			} 
+			else {
+				m_motor.move_velocity(0);
+				return;
+			}
+		}
+	}
+	
+    
 }
+
+
 
 void Roller::switch_type() {
 	if (roller_type == OPTICAL) {
