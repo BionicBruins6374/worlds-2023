@@ -40,11 +40,11 @@ void Drivetrain::update(int32_t forward_backward_axis_int, int32_t left_right_ax
  
 	m_left_back_motor.move_voltage(left_voltage); // 600 with blue motors
 	m_left_front_motor.move_voltage(left_voltage);
-	m_left_middle_motor.move_voltage(left_voltage);
+	m_left_middle_motor.move_voltage(left_voltage * -1);
 
 	m_right_back_motor.move_voltage(right_voltage);
 	m_right_front_motor.move_voltage(right_voltage);
-	m_right_middle_motor.move_voltage(right_voltage);
+	m_right_middle_motor.move_voltage(right_voltage * -1);
 }
 
 void Drivetrain::next_reference_frame() {
