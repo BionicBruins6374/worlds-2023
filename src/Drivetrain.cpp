@@ -9,8 +9,8 @@ Drivetrain::Drivetrain(int8_t const left_back_motor_port, int8_t const right_bac
 	, m_right_back_motor{ right_back_motor_port, pros::E_MOTOR_GEAR_BLUE }
 	, m_left_front_motor{ left_front_motor_port, pros::E_MOTOR_GEAR_BLUE, true }
 	, m_right_front_motor{ right_front_motor_port, pros::E_MOTOR_GEAR_BLUE }
-	, m_right_middle_motor { right_middle_motor_port, pros::E_MOTOR_GEAR_BLUE, true}
-	, m_left_middle_motor { left_middle_motor_port, pros::E_MOTOR_GEAR_BLUE} // does need to be reversed?
+	, m_right_middle_motor { right_middle_motor_port, pros::E_MOTOR_GEAR_BLUE}
+	, m_left_middle_motor { left_middle_motor_port, pros::E_MOTOR_GEAR_BLUE, true} // does need to be reversed?
 	 {}
 
 static float scale(float const raw) {

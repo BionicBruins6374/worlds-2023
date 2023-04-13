@@ -27,11 +27,11 @@ void Robot::update_intake() {
 	}
 }
 void Robot::update_expansion() {
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-		m_expansion.press_trigger();
-	}
+	// if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+	// 	m_expansion.press_trigger();
+	// }
 	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-		m_expansion.trigger();
+		m_expansion.trigger2();
 	}
 
 	
@@ -82,3 +82,7 @@ void Robot::update(std::string color) {
 	update_roller(color);
 	update_catapult();
 }
+
+
+
+
