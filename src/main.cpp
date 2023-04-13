@@ -24,12 +24,12 @@ char* buttonText = "r";
 static lv_res_t btn_click_action(lv_obj_t * btn)
 {
 	redOrBlue = !redOrBlue;
-	lv_label_set_text(setLabel,"Was clicked");
 	if (redOrBlue == true) {
 		buttonText = "b";
 	} else if (redOrBlue == false) {
 		buttonText = "r";
 	}
+	lv_label_set_text(setLabel,buttonText);
 	return LV_RES_OK;
 }
 
@@ -58,4 +58,6 @@ void opcontrol() {
 		pros::Task::delay(1);
 	}
 }
-void autonomous() {}
+void autonomous() {
+
+}

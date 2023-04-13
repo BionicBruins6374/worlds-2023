@@ -54,7 +54,7 @@ void Roller::turn_off() {
 }
 
 void Roller::optical_spin() {
-	if (!blue_alliance ) {
+	if (!blue_alliance) {
 		while (true) {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
       			m_motor.move_velocity(100);
