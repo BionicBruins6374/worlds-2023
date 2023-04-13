@@ -33,7 +33,10 @@ public:
 	void spin_wheel(double scaler) ;	
 	void turn_off();
 	void optical_spin();
+	void optical_spin(std::string color);
 	void switch_type();
 	void main_spin_roller(int scaler) ;
+	void main_spin_roller(int scaler, std::string color) ;
+
 
 };
