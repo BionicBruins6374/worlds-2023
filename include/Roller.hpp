@@ -37,6 +37,7 @@ public:
 	void switch_type();
 	void main_spin_roller(int scaler) ;
 	void main_spin_roller(int scaler, std::string color) ;
+	void turn_light_on();
 
 
 };

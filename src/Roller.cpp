@@ -16,6 +16,10 @@ void Roller::switch_color() const {
 	// moves motor 180 degrees forward at a fast pace (switches roller color)
 	m_motor.move_relative(180, 100);
 }
+void Roller::turn_light_on() {
+	optical_front.set_led_pwm(100);
+	optical_side.set_led_pwm(100);
+}
 void Roller::fine_adjust(RollerCode code) {
 	switch (code) {
 		case FORWARD:
@@ -83,9 +87,9 @@ void Roller::optical_spin() {
     
 }
 
+
 void Roller::optical_spin(std::string color) {
 	if (color == "r") {
-		while (true) {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
       			m_motor.move_velocity(100);
 				pros::Task::delay(5);
@@ -94,10 +98,7 @@ void Roller::optical_spin(std::string color) {
       			m_motor.move_velocity(0);
 				return;
     		}
-		}
-	}
-	else if (color == "b") {
-		while (true) {
+		} else if (color == "b") {
 			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
 				m_motor.move_velocity(100);
 				pros::Task::delay(5);
@@ -106,11 +107,8 @@ void Roller::optical_spin(std::string color) {
 				m_motor.move_velocity(0);
 				return;
 			}
-		}
 	}
 }
-
-
 
 void Roller::switch_type() {
 	if (roller_type == OPTICAL) {
