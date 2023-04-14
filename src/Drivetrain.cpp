@@ -42,6 +42,7 @@ void Drivetrain::update(int32_t forward_backward_axis_int, int32_t left_right_ax
     auto const left_voltage = static_cast<int32_t>(forward_backward_axis - turn_differential);
     auto const right_voltage = static_cast<int32_t>(forward_backward_axis + turn_differential);
 
+
     m_left_back_motor.move_voltage(left_voltage);
     m_left_front_motor.move_voltage(left_voltage);
     m_left_middle_motor.move_voltage(right_voltage);

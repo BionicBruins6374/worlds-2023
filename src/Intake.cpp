@@ -9,7 +9,7 @@ void Intake::set_on(bool value) {
 		velocity = reverse_velocity(constants::INTAKE_VELOCITY);
 	}
 	m_left_motor.move_velocity(velocity);
-	m_right_motor.move_velocity(velocity);
+	// m_right_motor.move_velocity(velocity);
 }
 
 void Intake::toggle(bool const reverse) {
