@@ -23,11 +23,15 @@ private:
 	void update_intake();
 	void update_expansion();
 	void update_roller();
+	void update_roller(std::string color);
+
 	void update_catapult();
 	void update_controller(); 
 public:
 
 	Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller roller, Catapult catapult);
 	void update();
+	void update(std::string color);
+
 };
 

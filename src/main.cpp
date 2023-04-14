@@ -27,12 +27,12 @@ char* buttonText = "r";
 static lv_res_t btn_click_action(lv_obj_t * btn)
 {
 	redOrBlue = !redOrBlue;
-	lv_label_set_text(setLabel,"Was clicked");
 	if (redOrBlue == true) {
 		buttonText = "b";
 	} else if (redOrBlue == false) {
 		buttonText = "r";
 	}
+	lv_label_set_text(setLabel,buttonText);
 	return LV_RES_OK;
 }
 
@@ -57,7 +57,7 @@ void opcontrol() {
 	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 
 	while (true) {
-		robot.update();
+		robot.update(buttonText);
 		pros::Task::delay(1);
 	}
 }
@@ -113,3 +113,4 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 
 
 void autonomous() {}
+

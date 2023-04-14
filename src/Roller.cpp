@@ -1,4 +1,5 @@
 #include <cstdio>
+#include <iostream>
 #include "Roller.hpp"
 #include "constants.hpp"
 #include "pros/optical.hpp"
@@ -53,7 +54,7 @@ void Roller::turn_off() {
 }
 
 void Roller::optical_spin() {
-	if (!blue_alliance ) {
+	if (!blue_alliance) {
 		while (true) {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
       			m_motor.move_velocity(100);
@@ -67,7 +68,6 @@ void Roller::optical_spin() {
 	}
 
 	else if (blue_alliance) {
-		std::printf("REDDD");
 		while (true) {
 			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
 				m_motor.move_velocity(100);
@@ -83,6 +83,33 @@ void Roller::optical_spin() {
     
 }
 
+void Roller::optical_spin(std::string color) {
+	if (color == "r") {
+		while (true) {
+			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
+      			m_motor.move_velocity(100);
+				pros::Task::delay(5);
+    		} 
+			else {
+      			m_motor.move_velocity(0);
+				return;
+    		}
+		}
+	}
+	else if (color == "b") {
+		while (true) {
+			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
+				m_motor.move_velocity(100);
+				pros::Task::delay(5);
+			} 
+			else {
+				m_motor.move_velocity(0);
+				return;
+			}
+		}
+	}
+}
+
 
 
 void Roller::switch_type() {
@@ -93,10 +120,10 @@ void Roller::switch_type() {
 		roller_type = OPTICAL;
 	}
 }
-void Roller::main_spin_roller(int scaler )  {
+void Roller::main_spin_roller(int scaler, std::string color )  {
 	switch (roller_type) {
 		case OPTICAL:
-			optical_spin();
+			optical_spin(color);
 			break;
 		case MANUAL_CONTROL:
 			spin_wheel(scaler);
