@@ -38,5 +38,6 @@ public:
 	void main_spin_roller(int scaler) ;
 	void main_spin_roller(int scaler, std::string color) ;
 
+	Roller::RollerType get_type();
 
 };

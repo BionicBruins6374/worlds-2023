@@ -64,7 +64,9 @@ void Roller::optical_spin() {
       			m_motor.move_velocity(0);
 				return;
     		}
+			pros::Task::delay(2);
 		}
+
 	}
 
 	else if (blue_alliance) {
@@ -77,11 +79,18 @@ void Roller::optical_spin() {
 				m_motor.move_velocity(0);
 				return;
 			}
+		pros::Task::delay(2);
 		}
 	}
 	
     
 }
+
+
+Roller::RollerType Roller::get_type() {
+	return roller_type;
+}
+
 
 void Roller::optical_spin(std::string color) {
 	if (color == "r") {
