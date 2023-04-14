@@ -9,7 +9,7 @@ void Robot::update_controller() {
 	m_controller_partner.print(1,1, "Intake Motor Temp: %f", m_intake.get_temp());
 }
 void Robot::update_drivetrain() {
-	m_drivetrain.update(m_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), m_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+	m_drivetrain.update( m_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), m_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) * -1);
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
 		m_drivetrain.next_reference_frame();
 	} else if (m_controller.get_digital(pros::E_CONTROLLER_DIGITAL_A)) {
