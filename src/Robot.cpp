@@ -45,7 +45,7 @@ void Robot::update_expansion() {
 void Robot::update_roller(std::string color) {
 	
 	// switch from optical sensor to roller when primary controller tries to use roller
-	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_A)) {
 		m_roller.switch_type();
 	}
 	
