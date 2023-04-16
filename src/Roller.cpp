@@ -76,7 +76,6 @@ bool Roller::checkForOptical(std::string color) {
 
 void Roller::optical_spin(std::string color, int direction) {
 	if (color == "r") {
-		while (true) {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
       			m_motor.move_velocity(450 * direction);
 				pros::Task::delay(5);
@@ -85,13 +84,8 @@ void Roller::optical_spin(std::string color, int direction) {
       			m_motor.move_velocity(0);
 				return;
     		}
-			if (!(optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ))
-				m_motor.move_velocity(0);
-				break;
-		}
 	} 
 	else if (color == "b") {
-		while (true) {
 			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
 				m_motor.move_velocity(100 * direction);
 				pros::Task::delay(5);
@@ -100,9 +94,6 @@ void Roller::optical_spin(std::string color, int direction) {
 				m_motor.move_velocity(0);
 				return;
 			}
-			if (!(optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280))
-				break;
-		}
 	}
 }
 
