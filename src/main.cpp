@@ -61,56 +61,5 @@ void opcontrol() {
 		pros::Task::delay(1);
 	}
 }
-
-void auton_sole() {}
-void auton_roller_side() {}
-void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
-	
-	chassis->moveDistance(t * 1_ft);
-	chassis->turnAngle(-90_deg); // clockwise 
-
-	chassis->moveDistance((t-18) * 1_ft);
-	
-	roller.optical_spin(); // roller
-
-	chassis->moveDistance((t-18) * -1_ft);
-	
-	chassis->turnAngle(-135_deg);
-
-	chassis->moveDistance(sqrt( (pow((3*t/2),2) + pow((t - r + t/2),2) ) ) * 1_ft);
-	chassis->turnAngle(-90_deg);
-
-	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) - 0.1) * 1_ft );
-	cata.spin_motor(9000);
-	chassis->moveDistance(0.1_ft); // move a tiny bit more forward (the 0.1)
-	chassis->turnAngle(360_deg);
-	
-	// intake
-	intake.toggle(false);
-	pros::Task::delay(2000);
-	intake.toggle(false);
-
-	chassis->turnAngle(90_deg); // counterclock 90
-	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
-	
-	// intake
-	intake.toggle(false);
-	pros::Task::delay(2000);
-	intake.toggle(false);
-
-	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
-	chassis->turnAngle(90_deg); // counterclock 90
-	
-	// intake
-	intake.toggle(false);
-	pros::Task::delay(2000);
-	intake.toggle(false);
-
-	chassis->turnAngle(45_deg); // counter clock 45 
-	chassis->moveDistance(t* 1_ft);
-
-} 
-
-
 void autonomous() {}
 

@@ -17,7 +17,7 @@ Catapult::Catapult(int8_t motor_port, std::uint8_t port )
 // will be called to move the catapult into loading position and to launch it
 void Catapult::spin_motor(int voltage_option) {
     while (m_limit_switch.get_value() == 0) {// check this
-        m_motor.move_voltage(-1 * constants::CATAPULT_VOLTAGE[voltage_option]);
+        m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
     } 
 }
 
@@ -37,5 +37,4 @@ void Catapult::set_voltage(double voltage) {
 // get initial pot value
 // while new pot value != pot value + x amnt (1000)
 // m_motor.move_voltage()
-
 

@@ -14,6 +14,7 @@ constexpr int8_t OPTICAL_SENSOR_BACK = 21;
 
 
 constexpr int8_t LEFT_BACK_MOTOR = 7;
+
 constexpr int8_t LEFT_MIDDLE_MOTOR = 6;
 constexpr int8_t LEFT_FRONT_MOTOR = 5;
 

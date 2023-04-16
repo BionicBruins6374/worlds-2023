@@ -53,59 +53,55 @@ void Roller::turn_off() {
 	m_motor.move_velocity(0);
 }
 
-void Roller::optical_spin() {
-	if (!blue_alliance) {
-		while (true) {
-			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
-      			m_motor.move_velocity(100);
-				pros::Task::delay(5);
-    		} 
-			else {
-      			m_motor.move_velocity(0);
-				return;
-    		}
-		}
-	}
-
-	else if (blue_alliance) {
-		while (true) {
-			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
-				m_motor.move_velocity(100);
-				pros::Task::delay(5);
-			} 
-			else {
-				m_motor.move_velocity(0);
-				return;
-			}
-		}
-	}
-	
-    
+void Roller::turn_light_on() {
+	optical_front.set_led_pwm(100);
+	optical_side.set_led_pwm(100);
 }
 
-void Roller::optical_spin(std::string color) {
+bool Roller::checkForOptical(std::string color) {
+	if (color == "r") {
+		if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
+		return true;
+		} else {
+		return false;
+		}
+	} else {
+		if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
+void Roller::optical_spin(std::string color, int direction) {
 	if (color == "r") {
 		while (true) {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
-      			m_motor.move_velocity(100);
+      			m_motor.move_velocity(450 * direction);
 				pros::Task::delay(5);
     		} 
 			else {
       			m_motor.move_velocity(0);
 				return;
     		}
+			if (!(optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ))
+				m_motor.move_velocity(0);
+				break;
 		}
-	}
+	} 
 	else if (color == "b") {
 		while (true) {
 			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
-				m_motor.move_velocity(100);
+				m_motor.move_velocity(100 * direction);
 				pros::Task::delay(5);
 			} 
 			else {
 				m_motor.move_velocity(0);
 				return;
 			}
+			if (!(optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280))
+				break;
 		}
 	}
 }
@@ -123,7 +119,7 @@ void Roller::switch_type() {
 void Roller::main_spin_roller(int scaler, std::string color )  {
 	switch (roller_type) {
 		case OPTICAL:
-			optical_spin(color);
+			optical_spin(color,scaler);
 			break;
 		case MANUAL_CONTROL:
 			spin_wheel(scaler);
