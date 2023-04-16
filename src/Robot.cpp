@@ -9,6 +9,7 @@ void Robot::update_controller() {
 	m_controller_partner.print(1,1, "Intake Motor Temp: %f", m_intake.get_temp());
 }
 void Robot::update_drivetrain() {
+
 	m_drivetrain.update( m_controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y), m_controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) * -1);
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_B)) {
 		m_drivetrain.next_reference_frame();
@@ -60,11 +61,11 @@ void Robot::update_catapult() {
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
 		std::printf("X pressed");
 		// launches catapult forward
-		// m_catapult.spin_motor(0); 
-		m_catapult.spin_motor_no_limit(-11.8);
+		m_catapult.spin_motor(0); 
+		// m_catapult.spin_motor_no_limit(-11.8);
 		// moves it back to loading position
-		// m_catapult.spin_motor(1);
-		m_catapult.spin_motor_no_limit(-11.8);
+		m_catapult.spin_motor(1);
+		// m_catapult.spin_motor_no_limit(-11.8);
 	}
 	// presumably used to set it to load position
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {

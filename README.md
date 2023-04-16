@@ -1,4 +1,6 @@
-# a-team-robot
+# Worlds Robot 2023
+
+2022-2023 Season, Worlds 4/25 to 4/27
 
 ## Contributing Rules
 
