@@ -59,25 +59,22 @@ void Robot::update_roller(std::string color) {
 void Robot::update_catapult() {
 	// to shoot it, already in launch position 
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
-		std::printf("X pressed");
 		// launches catapult forward
 		m_catapult.spin_motor(0); 
-		// m_catapult.spin_motor_no_limit(-11.8);
+
 		// moves it back to loading position
 		m_catapult.spin_motor(1);
-		// m_catapult.spin_motor_no_limit(-11.8);
 	}
 	// presumably used to set it to load position
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
 		// m_catapult.spin_motor(0);
-		std::printf("R1 pressed");
 		m_catapult.set_voltage(5000);
 	}
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R2)) {
-		std::printf("R2 pressed");
 		m_catapult.set_voltage(0);
 	}
 }
+
 void Robot::update(std::string color) {
 	update_drivetrain();
 	update_intake();
