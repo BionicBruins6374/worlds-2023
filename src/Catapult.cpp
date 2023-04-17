@@ -16,19 +16,27 @@ Catapult::Catapult(int8_t motor_port, std::uint8_t port)
 }
 
 void Catapult::spin_motor(int voltage_option) {
-    const int timeout_ms = 5000; // set timeout to 5 seconds
-    const auto start_time = pros::millis();
+    const int timeout = 3000; // set timeout to 3 seconds
+    bool limit_switch_pressed = false;
+    uint32_t start_time = pros::millis();
+    while (true) {
+        if (m_limit_switch.get_value() == 1) {
+            if (limit_switch_pressed) {
+                break;
+            } else {
+                limit_switch_pressed = true;
+            }
+        } else {
+            limit_switch_pressed = false;
+            m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
+        }
 
-    while (m_limit_switch.get_value() == 0) {
-        m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
-
-        if (pros::millis() - start_time > timeout_ms) {
-            pros::lcd::print(0, "Failed to reach limit switch within timeout\n");
-            m_motor.move_voltage(0); // stop the motor
+        if (pros::millis() - start_time > timeout) {
+            std::printf("Spin motor timeout reached");
             break;
         }
     }
-    m_motor.move_voltage(0); // stop the motor
+    m_motor.move_voltage(0);
 }
 
 void Catapult::spin_motor_no_limit(double shift_amount) {
