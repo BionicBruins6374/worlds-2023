@@ -20,7 +20,7 @@ private:
 	Roller m_roller;
 	Catapult m_catapult;
 	void update_drivetrain();
-	void update_intake();
+	void update_intake(std::string color);
 	void update_expansion();
 	void update_roller();
 	void update_roller(std::string color);

@@ -57,43 +57,23 @@ void Roller::turn_light_on() {
 	optical_front.set_led_pwm(100);
 	optical_side.set_led_pwm(100);
 }
-
-bool Roller::checkForOptical(std::string color) {
-	if (color == "r") {
-		if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
-		return true;
-		} else {
-		return false;
-		}
-	} else {
-		if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-}
-
-void Roller::optical_spin(std::string color, int direction) {
+/**
+Optical spin DOES NOT SPIN
+optical_spin just checks if it is correct color, and if it is, it will stop spinning
+This is because intake just overrides anything optical does, so intake/roller will keep running until own color detected, then stop
+*/
+void Roller::optical_spin(std::string color) {
 	if (color == "r") {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
-      			m_motor.move_velocity(450 * direction);
+      			m_motor.move_velocity(0);
 				pros::Task::delay(5);
     		} 
-			else {
-      			m_motor.move_velocity(0);
-				return;
-    		}
 	} 
 	else if (color == "b") {
 			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
-				m_motor.move_velocity(100 * direction);
+				m_motor.move_velocity(0);
 				pros::Task::delay(5);
 			} 
-			else {
-				m_motor.move_velocity(0);
-				return;
-			}
 	}
 }
 
@@ -110,7 +90,7 @@ void Roller::switch_type() {
 void Roller::main_spin_roller(int scaler, std::string color )  {
 	switch (roller_type) {
 		case OPTICAL:
-			optical_spin(color,scaler);
+			optical_spin(color);
 			break;
 		case MANUAL_CONTROL:
 			spin_wheel(scaler);
