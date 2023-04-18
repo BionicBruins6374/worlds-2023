@@ -62,22 +62,41 @@ Optical spin DOES NOT SPIN
 optical_spin just checks if it is correct color, and if it is, it will stop spinning
 This is because intake just overrides anything optical does, so intake/roller will keep running until own color detected, then stop
 */
+
+bool Roller::checkForOptical(std::string color) {
+	if (color == "b") {
+		if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
+		return true;
+		} else {
+		return false;
+		}
+	} else {
+		if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
 void Roller::optical_spin(std::string color) {
-	if (color == "r") {
+	if (color == "b") {
 			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
-      			m_motor.move_velocity(0);
+				stopRoller();
 				pros::Task::delay(5);
     		} 
 	} 
-	else if (color == "b") {
+	else if (color == "r") {
 			if (optical_front.get_hue() >= 210 && optical_front.get_hue() <= 280) {
-				m_motor.move_velocity(0);
+				stopRoller();
 				pros::Task::delay(5);
 			} 
 	}
 }
 
-
+void Roller::stopRoller() {
+	m_motor.move_voltage(0);
+}
 
 void Roller::switch_type() {
 	if (roller_type == OPTICAL) {

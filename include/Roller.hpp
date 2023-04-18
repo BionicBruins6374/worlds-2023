@@ -3,6 +3,8 @@
 #include <cstdint>
 #include "pros/motors.hpp"
 #include "pros/optical.hpp"
+#include "Intake.hpp"
+
 
 class Roller {
 private:
@@ -38,4 +40,6 @@ public:
 	void main_spin_roller(int scaler) ;
 	void main_spin_roller(int scaler, std::string color) ;
 	void turn_light_on();
+	void stopRoller();
+	bool checkForOptical(std::string color);
 };
