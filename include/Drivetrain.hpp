@@ -17,6 +17,8 @@ private:
 	pros::Motor m_left_middle_motor; 
 	pros::Motor m_right_middle_motor;
 
+	float m_drive_turn_sensitivity;
+
 	DrivetrainReferenceFrame m_reference_frame = DrivetrainReferenceFrame::IntakeAtFront;
 public:
 	Drivetrain(int8_t left_back_motor_port, int8_t right_back_motor_port, int8_t left_front_motor_port, int8_t right_front_motor_port

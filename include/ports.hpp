@@ -5,6 +5,7 @@
 // namespace for port connections to V5 devices
 namespace ports {
 
+// constexpr uint8_t PISTON_INDEXER = 'A';
 constexpr uint8_t EXPANSION_PISTON_LEFT = 'A';
 constexpr uint8_t EXPANSION_PISTON_RIGHT = 'C';
 
@@ -26,11 +27,9 @@ constexpr int8_t INTAKE_RIGHT =  15;
 constexpr int8_t ROLLER = 13;
 
 constexpr int8_t CATAPULT_MOTOR = 8;
-constexpr uint8_t LIMIT_SWITCH = 'D'; 
+constexpr uint8_t LIMIT_SWITCH = 'C'; 
 
 constexpr int8_t INERTIAL_1 = 1; // right
 constexpr int8_t INERTIAL_2 = 9; // left
 
-
-
-}  // namespace ports
+}  // namespace ports 
