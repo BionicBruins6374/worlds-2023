@@ -13,6 +13,7 @@ Catapult::Catapult(int8_t motor_port, std::uint8_t port)
     : m_motor{motor_port, pros::E_MOTOR_GEAR_RED, true}
     , m_limit_switch{port}
 {
+    m_motor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 }
 
 void Catapult::spin_motor(int voltage_option) {
