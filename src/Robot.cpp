@@ -71,7 +71,7 @@ void Robot::update(std::string color) {
 	update_drivetrain();
 	update_intake();
 	update_expansion();
-	update_roller(color);
+	update_intake_roller(color);
 	update_catapult();
 	std::printf("%d\n",m_roller.checkForOptical(color));
 }
