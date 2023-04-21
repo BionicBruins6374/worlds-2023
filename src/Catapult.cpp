@@ -15,28 +15,59 @@ Catapult::Catapult(int8_t motor_port, std::uint8_t port)
 {
 }
 
+// void Catapult::spin_motor(int voltage_option) {
+//     const int timeout = 3000; // set timeout to 3 seconds
+//     bool limit_switch_pressed = false;
+//     uint32_t start_time = pros::millis();
+//     while (true) {
+//         if (m_limit_switch.get_value() == 1) {
+//             if (limit_switch_pressed) {
+//                 break;
+//             } else {
+//                 limit_switch_pressed = true;
+//             }
+//         } else {
+//             limit_switch_pressed = false;
+//             m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
+//         }
+
+//         if (pros::millis() - start_time > timeout) {
+//             std::printf("Spin motor timeout reached");
+//             break;
+//         }
+//     }
+//     m_motor.move_voltage(0);
+// }
+
 void Catapult::spin_motor(int voltage_option) {
     const int timeout = 3000; // set timeout to 3 seconds
-    bool limit_switch_pressed = false;
     uint32_t start_time = pros::millis();
-    while (true) {
-        if (m_limit_switch.get_value() == 1) {
-            if (limit_switch_pressed) {
-                break;
-            } else {
-                limit_switch_pressed = true;
-            }
-        } else {
-            limit_switch_pressed = false;
-            m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
-        }
+    // spin it till its not the ideal value, 
 
+    // while (true) {
+        
+    // }
+    while (!(m_limit_switch.get_value() == switch_ideal_value)) {
+        m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
         if (pros::millis() - start_time > timeout) {
             std::printf("Spin motor timeout reached");
             break;
         }
+        pros::Task::delay(50);
+
     }
+
+    if (switch_ideal_value == 1) { switch_ideal_value = 0;}
+    else { switch_ideal_value = 1; }
+    m_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
+    m_motor.move_relative(10, 10000);
+    // spin it again to get it to the ideal value
+    while (!(m_limit_switch.get_value() == switch_ideal_value)) {
+        m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
+    }
+
     m_motor.move_voltage(0);
+    
 }
 
 void Catapult::spin_motor_no_limit(double shift_amount) {
