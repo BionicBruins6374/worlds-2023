@@ -18,20 +18,22 @@ void Robot::update_drivetrain() {
 	}
 }
 
-void Robot::update_intake() {
-	// if ( m_roller.get_type() == Roller::OPTICAL && (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15  )) {
-	// 	m_roller.spin_wheel(1);
-	// }
-
+void Robot::update_intake_roller(std::string color) {
+	m_roller.turn_light_on();
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-		std::printf("L1 Pressed");
 		m_intake.toggle(false);
+		std::printf("%d\n",m_roller.checkForOptical(color));
+		if (m_roller.checkForOptical(color) == 1) {
+			m_intake.toggle(false);
+		}
 	}
 	else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-		std::printf("L2 Pressed");
 		m_intake.toggle(true);
+		std::printf("%d\n",m_roller.checkForOptical(color));
+		if (m_roller.checkForOptical(color) == 1) {
+			m_intake.toggle(false);
+		}
 	}
-	
 }
 void Robot::update_expansion() {
 	// if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
@@ -44,23 +46,7 @@ void Robot::update_expansion() {
 	
 }
 
-void Robot::update_roller(std::string color) {
-	// switch from optical sensor to roller when primary controller tries to use roller
-	m_roller.turn_light_on();
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-		if (m_roller.checkForOptical(color) == true) {
-			m_roller.optical_spin(color,1);
-		}
-		m_roller.optical_spin(color,1);
-	}
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-		if (m_roller.checkForOptical(color) == true) {
-		m_roller.optical_spin(color,-1);
-		}
-	}
 
-	pros::delay(100);
-}
 
 void Robot::update_catapult() {
 	// to shoot it, already in launch position 
