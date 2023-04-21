@@ -23,10 +23,8 @@ private:
 	pros::Optical optical_front;
 	pros::Optical optical_back;
 	void update_drivetrain();
-	void update_intake();
+	void update_intake_roller();
 	void update_expansion();
-	void update_roller();
-	void update_roller(std::string color);
 	void update_catapult();
 	void update_controller(); 
 public:
