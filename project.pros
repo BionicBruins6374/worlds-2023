@@ -1,7 +1,11 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
+<<<<<<< HEAD
     "project_name": "testie",
+=======
+    "project_name": "test67678",
+>>>>>>> master
     "target": "v5",
     "templates": {
       "kernel": {
@@ -310,7 +314,11 @@
     },
     "upload_options": {
       "icon": "alien",
+<<<<<<< HEAD
       "slot": 1
+=======
+      "slot": 3
+>>>>>>> master
     }
   }
 }

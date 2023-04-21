@@ -14,6 +14,7 @@ constexpr int8_t OPTICAL_SENSOR_BACK = 21;
 
 
 constexpr int8_t LEFT_BACK_MOTOR = 7;
+
 constexpr int8_t LEFT_MIDDLE_MOTOR = 6;
 constexpr int8_t LEFT_FRONT_MOTOR = 5;
 
@@ -27,7 +28,7 @@ constexpr int8_t INTAKE_RIGHT =  15;
 constexpr int8_t ROLLER = 13;
 
 constexpr int8_t CATAPULT_MOTOR = 8;
-constexpr uint8_t LIMIT_SWITCH = 'C'; 
+constexpr uint8_t LIMIT_SWITCH = 'D'; 
 
 constexpr int8_t INERTIAL_1 = 1; // right
 constexpr int8_t INERTIAL_2 = 9; // left
