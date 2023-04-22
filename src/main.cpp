@@ -54,7 +54,7 @@ void opcontrol() {
 	Expansion const expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
 	Roller const roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
 	Catapult const catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
-	Robot robot{ drivetrain, intake, expansion, roller, catapult, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK};
+	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 	
 	while (true) {
 		robot.update(buttonText);
