@@ -1,3 +1,5 @@
+#include "okapi/impl/device/rotarysensor/IMU.hpp"
+#include "pros/adi.hpp"
 #include "pros/rtos.hpp"
 #include "Drivetrain.hpp"
 #include "Robot.hpp"
@@ -7,6 +9,7 @@
 #include "ports.hpp"
 #include "odometry.hpp"
 #include "Expansion.hpp"
+#include "Inertial.hpp"
 #include "okapi/impl/device/motor/motor.hpp"
 #include "okapi/impl/device/motor/motorGroup.hpp"
 #include "cmath"
@@ -44,6 +47,9 @@ void initialize() {
 	lv_label_set_text(buttonLabel, buttonText);
 	setLabel = lv_label_create(lv_scr_act(),NULL);
 	lv_label_set_text(setLabel,"Funny");
+
+	okapi::IMU(ports::INERTIAL_1).calibrate();
+	okapi::IMU(ports::INERTIAL_2).calibrate();
 }
 
 void disabled() {}
@@ -61,5 +67,70 @@ void opcontrol() {
 		pros::Task::delay(1);
 	}
 }
-void autonomous() {}
+
+void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
+	
+	chassis->moveDistance(t * 1_ft);
+	chassis->turnAngle(-90_deg); // clockwise 
+
+	chassis->moveDistance((t-18) * 1_ft);
+	
+	roller.optical_spin(); // roller
+
+	chassis->moveDistance((t-18) * -1_ft);
+	
+	chassis->turnAngle(-135_deg);
+
+	chassis->moveDistance(sqrt( (pow((3*t/2),2) + pow((t - r + t/2),2) ) ) * 1_ft);
+	chassis->turnAngle(-90_deg);
+
+	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) - 0.1) * 1_ft );
+	cata.spin_motor(9000);
+	chassis->moveDistance(0.1_ft); // move a tiny bit more forward (the 0.1)
+	chassis->turnAngle(360_deg);
+	
+	// intake
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+
+	chassis->turnAngle(90_deg); // counterclock 90
+	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
+	
+	// intake
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+
+	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
+	chassis->turnAngle(90_deg); // counterclock 90
+	
+	// intake
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+
+}
+void autonomous() {
+	// all left should be reversed
+	auto chass = build_PID(okapi::MotorGroup({okapi::Motor(ports::LEFT_BACK_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),
+	okapi::Motor(ports::LEFT_MIDDLE_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),  okapi::Motor(ports::LEFT_FRONT_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
+                                   okapi::MotorGroup({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)}), 
+								   ports::INERTIAL_1,
+								   ports::INERTIAL_2);
+
+	chass->moveDistance(1_ft);
+	// chass->turnAngle(90_deg);
+	// build_PID(okapi::MotorGroup left_motor, okapi::MotorGroup right_motor, int inertial1, int inertial2)
+}
+
+// void autonomous() {
+	// pros::Task::delay(100);
+	// pros::ADIDigitalOut dig = pros::ADIDigitalOut{'H'};
+	// dig.set_value(false);
+	// std::printf("changed to false");
+	// pros::Task::delay(300);
+	// dig.set_value(true);
+
+// }
 

@@ -3,19 +3,24 @@
 #include "okapi/impl/device/rotarysensor/IMU.hpp"
 #include "okapi/api/filter/emaFilter.hpp"
 #include "okapi/impl/device/motor/motorGroup.hpp"
+#include "okapi/impl/util/timeUtilFactory.hpp"
+#include "okapi/api/filter/filteredControllerInput.hpp"
+#include "okapi/api/filter/emaFilter.hpp"
 #include "ports.hpp"
 #include <cstdint>
 #include <iostream>
+#include <memory>
 
 using namespace okapi;
+using namespace std;
 
 std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor, const okapi::MotorGroup right_motor, int inertial1, int inertial2) {
-    auto inert1 = std::shared_ptr<IMU>(new IMU(inertial1));
-    auto inert2 = std::shared_ptr<IMU>(new IMU(inertial2));
+    auto inert1 = std::shared_ptr<IMU>(new IMU(inertial1, okapi::IMUAxes::x));
+    auto inert2 = std::shared_ptr<IMU>(new IMU(inertial2, okapi::IMUAxes::y));
 
-    return okapi::ChassisControllerBuilder()
+    std::shared_ptr<ChassisController> chaz =  okapi::ChassisControllerBuilder()
     .withMotors(left_motor, right_motor)
-    .withDimensions(AbstractMotor::gearset::blue, {{3.25_in, 15.0_in}, imev5BlueTPR})
+    .withDimensions(AbstractMotor::gearset::blue, {{3_in, 12.0_in}, imev5BlueTPR})
     .withSensors(inert1, inert2)
     .withGains(
         {0.001, 0, 0.0001}, // Distance controller gains
@@ -23,4 +28,14 @@ std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor
         {0.001, 0, 0.0001}  // Angle controller gains (helps drive straight)
     )
     .build();
+    
+    // okapi::TimeUtil timeUtie = okapi::TimeUtilFactory::createDefault();
+    // std::unique_ptr<okapi::IterativePosPIDController> itPosPid = std::make_unique<okapi::IterativePosPIDController(0.001, 0, 0.0001, 0, timeUtie)>();
+    // okapi::ChassisControllerPID(timeUtie, chaz->getModel(), itPosPid, itPosPid, itPosPid); // set chassis scale and abstract motor
+    // okapi::FilteredControllerInput<okapi::IMU> 
+//     okapi::FilteredControllerInput(ControllerInput<okapi::IMU>,
+// std::unique_ptr<okapi::EmaFilter>);
+
+// std::unique_ptr<ControllerInput<okapi::IMU>> yas = std::make_unique(ControllerInput<okapi::IMU>);
+    return chaz; 
 }

@@ -31,8 +31,9 @@ void Robot::update_expansion() {
 	// if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
 	// 	m_expansion.press_trigger();
 	// }
-	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
-		m_expansion.trigger2();
+	
+	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) || m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+		m_expansion.trigger();
 	}
 
 	
@@ -62,8 +63,8 @@ void Robot::update_catapult() {
 		// launches catapult forward
 		m_catapult.spin_motor(0); 
 
-		// moves it back to loading position
-		m_catapult.spin_motor(1);
+		// // moves it back to loading position
+		// m_catapult.spin_motor(1);
 	}
 	// presumably used to set it to load position
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {
