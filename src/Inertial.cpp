@@ -22,11 +22,11 @@ std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor
     return okapi::ChassisControllerBuilder()
         .withMotors(left_motor, right_motor)
         .withDimensions(AbstractMotor::gearset::blue, {{3_in, 12.0_in}, imev5BlueTPR})
-        .withSensors(inert2, inert1)
+        .withSensors(inert1, inert2)
         .withGains(
-            {100, 10, 100}, // Distance controller gains
-            {10, 10, 10}, // Turn controller gains
-            {10, 10, 10}  // Angle controller gains (helps drive straight)
+        {0.002, 0.01, 0.000}, // Distance controller gains
+			{0.000, 0.0, 0.000}, // Turn controller gains
+			{0.002, 0.01, 0.000} // Angle controller gains (helps drive straight)
         )
         .build();
 

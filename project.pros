@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "move2",
+    "project_name": "noInertial78",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -310,7 +310,7 @@
     },
     "upload_options": {
       "icon": "alien",
-      "slot": 2
+      "slot": 8
     }
   }
 }
