@@ -112,31 +112,20 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 
 }
 void autonomous() {
+	Drivetrain drivetrain{ ports::LEFT_BACK_MOTOR, ports::RIGHT_BACK_MOTOR, ports::LEFT_FRONT_MOTOR, ports::RIGHT_FRONT_MOTOR, ports::LEFT_MIDDLE_MOTOR, ports::RIGHT_MIDDLE_MOTOR };
+	Intake intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
+	Expansion expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
+	Roller roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
+	Catapult catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
+	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 	pros::Task::delay(1000);	
-	// all left should be reversed
-	// auto chass = build_PID(okapi::MotorGroup({okapi::Motor(ports::LEFT_BACK_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),
-	// okapi::Motor(ports::LEFT_MIDDLE_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),  
-	// okapi::Motor(ports::LEFT_FRONT_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
-    //                                okapi::MotorGroup(
-	// 								{okapi::Motor(ports::RIGHT_BACK_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts), 
-	// 							   okapi::Motor(ports::RIGHT_MIDDLE_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts), 
-	// 							   okapi::Motor(ports::RIGHT_FRONT_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
-	// 							   ports::INERTIAL_1,
-	// 							   ports::INERTIAL_2);
 
-	// auto odom = build_odometry(
-	// 	okapi::MotorGroup({okapi::Motor(ports::LEFT_BACK_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),
-	// okapi::Motor(ports::LEFT_MIDDLE_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),  
-	// okapi::Motor(ports::LEFT_FRONT_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
-    //     okapi::MotorGroup({okapi::Motor(ports::RIGHT_BACK_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts), 
-	// 							   okapi::Motor(ports::RIGHT_MIDDLE_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts), 
-	// 							   okapi::Motor(ports::RIGHT_FRONT_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}));
-	auto odom = build_odometry (
-	okapi::MotorGroup({ okapi::Motor(-1 * ports::LEFT_BACK_MOTOR), okapi::Motor(-1 * ports::LEFT_MIDDLE_MOTOR), okapi::Motor(-1 * ports::LEFT_FRONT_MOTOR)}),
-	okapi::MotorGroup ({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)})
-		);
 
+	okapi::MotorGroup left_m = okapi::MotorGroup({ okapi::Motor(-1 * ports::LEFT_BACK_MOTOR), okapi::Motor(-1 * ports::LEFT_MIDDLE_MOTOR), okapi::Motor(-1 * ports::LEFT_FRONT_MOTOR)});
+	okapi::MotorGroup right_m = okapi::MotorGroup ({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)});
 	
+	auto chass = build_PID(left_m, right_m, ports::INERTIAL_1, ports::INERTIAL_2);
+	auto odom = build_odometry (left_m, right_m);
 
 	okapi::IntegratedEncoder left_front_encoder = okapi::IntegratedEncoder(ports::LEFT_FRONT_MOTOR);
 	okapi::IntegratedEncoder left_middle_encoder = okapi::IntegratedEncoder(ports::LEFT_MIDDLE_MOTOR);
@@ -157,24 +146,15 @@ void autonomous() {
 	right_middle_encoder.reset(); 
 	right_back_encoder.reset();
 
-	pros::Task::delay(500);
-
-	Roller roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
-
+	// so we can launch farther for auton
+	expansion.trigger();
 
 	std::printf("move forward 2ft\n");
-
-	// odom->moveDistance(2_ft);
-	// odom->moveDistance(-2_ft);
-	odom->turnAngle(90_deg);
+	// odom->turnAngle(90_deg);
+	odom->moveDistance(-1_ft);
 	std::printf("spin whweel");
 	roller.spin_wheel(1); 
-	// std::printf("turn 90deg\n");
-	// chass->turnAngle(90_deg);
-
-	// std::printf("move back 2 feet\n");
-	// chass->moveDistanceAsync(-2_ft);
-	// build_PID(okapi::MotorGroup left_motor, okapi::MotorGroup right_motor, int inertial1, int inertial2)
+	
 }
 
 // void autonomous() {

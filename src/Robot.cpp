@@ -61,10 +61,15 @@ void Robot::update_catapult() {
 	// to shoot it, already in launch position 
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
 		// launches catapult forward
-		m_catapult.spin_motor(0); 
+		m_catapult.spin_motor(0);
+		m_catapult.spin_motor(1);
+		std::printf("%d", m_catapult.switch_ideal_value); 
 
 		// // moves it back to loading position
 		// m_catapult.spin_motor(1);
+	}
+	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_Y)) {
+		m_catapult.spin_motor(1);
 	}
 	// presumably used to set it to load position
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_R1)) {

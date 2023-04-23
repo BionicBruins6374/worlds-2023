@@ -58,12 +58,6 @@ void Catapult::spin_motor(int voltage_option) {
 
     if (switch_ideal_value == 1) { switch_ideal_value = 0;}
     else { switch_ideal_value = 1; }
-    m_motor.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-    m_motor.move_relative(10, 10000);
-    // spin it again to get it to the ideal value
-    while (!(m_limit_switch.get_value() == switch_ideal_value)) {
-        m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
-    }
 
     m_motor.move_voltage(0);
     
@@ -78,3 +72,4 @@ void Catapult::spin_motor_no_limit(double shift_amount) {
 void Catapult::set_voltage(double voltage) {
     m_motor.move_voltage(voltage);
 }
+
