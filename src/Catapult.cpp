@@ -40,14 +40,13 @@ Catapult::Catapult(int8_t motor_port, std::uint8_t port)
 //     m_motor.move_voltage(0);
 // }
 
+// change this so it only spins cata one way and call it twice in Robot.cpp
+
 void Catapult::spin_motor(int voltage_option) {
     const int timeout = 3000; // set timeout to 3 seconds
     uint32_t start_time = pros::millis();
     // spin it till its not the ideal value, 
 
-    // while (true) {
-        
-    // }
     while (!(m_limit_switch.get_value() == switch_ideal_value)) {
         m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
         if (pros::millis() - start_time > timeout) {

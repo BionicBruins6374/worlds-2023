@@ -12,22 +12,24 @@
 #include <memory>
 
 using namespace okapi;
-using namespace std;
 
-std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor, const okapi::MotorGroup right_motor, int inertial1, int inertial2) {
-    auto inert1 = std::shared_ptr<IMU>(new IMU(inertial1, okapi::IMUAxes::x));
-    auto inert2 = std::shared_ptr<IMU>(new IMU(inertial2, okapi::IMUAxes::y));
+std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor, const okapi::MotorGroup right_motor, int8_t inertial1, int8_t inertial2) {
+    std::shared_ptr<IMU> inert1 = std::shared_ptr<IMU>(new IMU(inertial1, okapi::IMUAxes::x));
+    std::shared_ptr<IMU> inert2 = std::shared_ptr<IMU>(new IMU(inertial2, okapi::IMUAxes::y));
+    
+    
+    inert1->calibrate(); inert2->calibrate();    
+    return okapi::ChassisControllerBuilder()
+        .withMotors(left_motor, right_motor)
+        .withDimensions(AbstractMotor::gearset::blue, {{3_in, 12.0_in}, imev5BlueTPR})
+        .withSensors(inert2, inert1)
+        .withGains(
+            {100, 10, 100}, // Distance controller gains
+            {10, 10, 10}, // Turn controller gains
+            {10, 10, 10}  // Angle controller gains (helps drive straight)
+        )
+        .build();
 
-    std::shared_ptr<ChassisController> chaz =  okapi::ChassisControllerBuilder()
-    .withMotors(left_motor, right_motor)
-    .withDimensions(AbstractMotor::gearset::blue, {{3_in, 12.0_in}, imev5BlueTPR})
-    .withSensors(inert1, inert2)
-    .withGains(
-        {0.001, 0, 0.0001}, // Distance controller gains
-        {0.001, 0, 0.0001}, // Turn controller gains
-        {0.001, 0, 0.0001}  // Angle controller gains (helps drive straight)
-    )
-    .build();
     
     // okapi::TimeUtil timeUtie = okapi::TimeUtilFactory::createDefault();
     // std::unique_ptr<okapi::IterativePosPIDController> itPosPid = std::make_unique<okapi::IterativePosPIDController(0.001, 0, 0.0001, 0, timeUtie)>();
@@ -37,5 +39,5 @@ std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor
 // std::unique_ptr<okapi::EmaFilter>);
 
 // std::unique_ptr<ControllerInput<okapi::IMU>> yas = std::make_unique(ControllerInput<okapi::IMU>);
-    return chaz; 
 }
+

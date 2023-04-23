@@ -48,8 +48,8 @@ void initialize() {
 	setLabel = lv_label_create(lv_scr_act(),NULL);
 	lv_label_set_text(setLabel,"Funny");
 
-	okapi::IMU(ports::INERTIAL_1).calibrate();
-	okapi::IMU(ports::INERTIAL_2).calibrate();
+	// okapi::IMU(ports::INERTIAL_1).calibrate();
+	// okapi::IMU(ports::INERTIAL_2).calibrate();
 }
 
 void disabled() {}
@@ -114,13 +114,42 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 void autonomous() {
 	// all left should be reversed
 	auto chass = build_PID(okapi::MotorGroup({okapi::Motor(ports::LEFT_BACK_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),
-	okapi::Motor(ports::LEFT_MIDDLE_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),  okapi::Motor(ports::LEFT_FRONT_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
-                                   okapi::MotorGroup({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)}), 
+	okapi::Motor(ports::LEFT_MIDDLE_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts),  
+	okapi::Motor(ports::LEFT_FRONT_MOTOR, true, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
+                                   okapi::MotorGroup(
+									{okapi::Motor(ports::RIGHT_BACK_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts), 
+								   okapi::Motor(ports::RIGHT_MIDDLE_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts), 
+								   okapi::Motor(ports::RIGHT_FRONT_MOTOR, false, okapi::AbstractMotor::gearset::blue, okapi::AbstractMotor::encoderUnits::counts)}), 
 								   ports::INERTIAL_1,
 								   ports::INERTIAL_2);
+	
+	
+	okapi::IntegratedEncoder left_front_encoder = okapi::IntegratedEncoder(ports::LEFT_FRONT_MOTOR);
+	okapi::IntegratedEncoder left_middle_encoder = okapi::IntegratedEncoder(ports::LEFT_MIDDLE_MOTOR);
+	okapi::IntegratedEncoder left_back_encoder = okapi::IntegratedEncoder(ports::LEFT_BACK_MOTOR);
+	okapi::IntegratedEncoder right_front_encoder = okapi::IntegratedEncoder(ports::RIGHT_FRONT_MOTOR);
+	okapi::IntegratedEncoder right_middle_encoder = okapi::IntegratedEncoder(ports::RIGHT_MIDDLE_MOTOR);
+	okapi::IntegratedEncoder right_back_encoder = okapi::IntegratedEncoder(ports::RIGHT_BACK_MOTOR);
 
-	chass->moveDistance(1_ft);
+	std::printf("left back: %f \n", left_back_encoder.get());
+	std::printf("right back: %f \n", right_back_encoder.get());
+	std::printf("left front: %f \n", left_front_encoder.get());
+	std::printf("right front: %f \n", right_front_encoder.get());
+
+	left_front_encoder.reset(); 
+	left_middle_encoder.reset(); 
+	left_back_encoder.reset(); 
+	right_front_encoder.reset(); 
+	right_middle_encoder.reset(); 
+	right_back_encoder.reset();
+	std::printf("move forward 2ft\n");
+	chass->moveDistance(3_ft);
+
+	// std::printf("turn 90deg\n");
 	// chass->turnAngle(90_deg);
+
+	// std::printf("move back 2 feet\n");
+	// chass->moveDistanceAsync(-2_ft);
 	// build_PID(okapi::MotorGroup left_motor, okapi::MotorGroup right_motor, int inertial1, int inertial2)
 }
 
