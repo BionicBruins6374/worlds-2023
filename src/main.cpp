@@ -48,6 +48,7 @@ void initialize() {
 	setLabel = lv_label_create(lv_scr_act(),NULL);
 	lv_label_set_text(setLabel,"Funny");
 
+	
 	// okapi::IMU(ports::INERTIAL_1).calibrate();
 	// okapi::IMU(ports::INERTIAL_2).calibrate();
 }
@@ -67,6 +68,8 @@ void opcontrol() {
 		pros::Task::delay(1);
 	}
 }
+
+
 
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color) {
 	// start facing left if at top
@@ -150,14 +153,7 @@ void autonomous() {
 	expansion.trigger();
 
 	std::printf("move forward 2ft\n");
-	//odom->turnAngle(90_deg);
-	// chass->setMaxVelocity(50);
-	// std::printf("move forward 2ft\n");
-	//chass->moveDistance(-7_in);
-	//std::printf("turn angle\n");
-	//chass->turnAngle(90_deg);
-	//std::printf("spin whweel");
-	//roller.spin_wheel(1); 
+	
 	auton_indirect(chass, roller, catapult,intake, buttonText);
 	
 }

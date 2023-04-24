@@ -32,6 +32,7 @@ public:
 	Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller roller, Catapult catapult);
 	void update();
 	void update(std::string color);
+	Catapult get_cata(); 
 
 };
 
