@@ -22,28 +22,72 @@ double const r = 0.166667;
 lv_obj_t * changeColor;
 lv_obj_t * buttonLabel;
 lv_obj_t * setLabel;
+lv_obj_t * changeAutonSole;
+lv_obj_t * changeAutonRoller;
+lv_obj_t * changeAutonIndirect;
+lv_obj_t * autonLabel;
+char* autonSelect = "i";
 bool redOrBlue = false; //Red is false | Blue is true
 char* buttonText = "r";
 static lv_res_t btn_click_action(lv_obj_t * btn)
 {
-	redOrBlue = !redOrBlue;
-	if (redOrBlue == true) {
+	uint8_t id = lv_obj_get_free_num(btn);
+	if (id == 0) {
+		redOrBlue = !redOrBlue;
+		if (redOrBlue == true) {
 		buttonText = "b";
-	} else if (redOrBlue == false) {
+		} else if (redOrBlue == false) {
 		buttonText = "r";
+		}
+		lv_label_set_text(setLabel,buttonText);
+	} else if (id == 1) {
+		autonSelect = "s";
+		lv_label_set_text(autonLabel,autonSelect);
+	} else if (id == 2) {
+		autonSelect = "r";
+		lv_label_set_text(autonLabel,autonSelect);
+	} else if (id == 3) {
+		autonSelect = "i";
+		lv_label_set_text(autonLabel,autonSelect);
 	}
-	lv_label_set_text(setLabel,buttonText);
 	return LV_RES_OK;
 }
 
 void initialize() {
+
 	changeColor = lv_btn_create(lv_scr_act(),NULL);
+	lv_obj_set_free_num(changeColor, 0);
 	lv_btn_set_action(changeColor, LV_BTN_ACTION_CLICK, btn_click_action);
 	lv_obj_set_size(changeColor, 200, 50);
+
 	buttonLabel = lv_label_create(changeColor, NULL);
 	lv_label_set_text(buttonLabel, buttonText);
+
 	setLabel = lv_label_create(lv_scr_act(),NULL);
 	lv_label_set_text(setLabel,"Funny");
+
+	changeAutonSole = lv_btn_create(lv_scr_act(),NULL);
+	lv_obj_set_free_num(changeAutonSole,1);
+	lv_btn_set_action(changeAutonSole,LV_BTN_ACTION_CLICK,btn_click_action);
+	lv_obj_align(changeAutonSole,NULL,LV_ALIGN_IN_BOTTOM_LEFT,0,0);
+	lv_obj_set_size(changeAutonSole, 200, 50);
+
+
+	changeAutonRoller = lv_btn_create(lv_scr_act(),NULL);
+	lv_obj_set_free_num(changeAutonRoller,2);
+	lv_btn_set_action(changeAutonRoller,LV_BTN_ACTION_CLICK,btn_click_action);
+	lv_obj_align(changeAutonRoller,NULL,LV_ALIGN_IN_BOTTOM_MID,10,0);
+	lv_obj_set_size(changeAutonRoller, 200, 50);
+
+	changeAutonIndirect = lv_btn_create(lv_scr_act(),NULL);
+	lv_obj_set_free_num(changeAutonIndirect,3);
+	lv_btn_set_action(changeAutonIndirect,LV_BTN_ACTION_CLICK,btn_click_action);
+	lv_obj_align(changeAutonIndirect,NULL,LV_ALIGN_IN_BOTTOM_RIGHT,20,0);
+	lv_obj_set_size(changeAutonIndirect, 200, 50);
+
+	autonLabel = lv_label_create(lv_scr_act(),NULL);
+	lv_label_set_text(autonLabel,autonSelect);
+	lv_obj_align(autonLabel,NULL,LV_ALIGN_IN_LEFT_MID,10,0);
 }
 
 void disabled() {}
