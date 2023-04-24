@@ -68,16 +68,16 @@ void opcontrol() {
 	}
 }
 
-void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
-	
+void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color) {
+	// start facing left if at top
 	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(-90_deg); // clockwise 
 
-	chassis->moveDistance((t-18) * 1_ft);
+	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
 	
-	roller.optical_spin(); // roller
+	roller.main_spin_roller(1, alliance_color); // roller
 
-	chassis->moveDistance((t-18) * -1_ft);
+	chassis->moveDistance((t-1.5) * -1_ft);
 	
 	chassis->turnAngle(-135_deg);
 
@@ -121,7 +121,7 @@ void autonomous() {
 	pros::Task::delay(1000);	
 
 
-	okapi::MotorGroup left_m = okapi::MotorGroup({ okapi::Motor(-1 * ports::LEFT_BACK_MOTOR), okapi::Motor(-1 * ports::LEFT_MIDDLE_MOTOR), okapi::Motor(-1 * ports::LEFT_FRONT_MOTOR)});
+	okapi::MotorGroup left_m = okapi::MotorGroup({ okapi::Motor(ports::LEFT_BACK_MOTOR), okapi::Motor( ports::LEFT_MIDDLE_MOTOR), okapi::Motor(ports::LEFT_FRONT_MOTOR)});
 	okapi::MotorGroup right_m = okapi::MotorGroup ({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)});
 	
 	auto chass = build_PID(left_m, right_m, ports::INERTIAL_1, ports::INERTIAL_2);
@@ -150,13 +150,17 @@ void autonomous() {
 	expansion.trigger();
 
 	std::printf("move forward 2ft\n");
-	// odom->turnAngle(90_deg);
-	odom->moveDistance(-1_ft);
-	std::printf("spin whweel");
-	roller.spin_wheel(1); 
+	//odom->turnAngle(90_deg);
+	// chass->setMaxVelocity(50);
+	// std::printf("move forward 2ft\n");
+	//chass->moveDistance(-7_in);
+	//std::printf("turn angle\n");
+	//chass->turnAngle(90_deg);
+	//std::printf("spin whweel");
+	//roller.spin_wheel(1); 
+	auton_indirect(chass, roller, catapult,intake, buttonText);
 	
 }
-
 // void autonomous() {
 	// pros::Task::delay(100);
 	// pros::ADIDigitalOut dig = pros::ADIDigitalOut{'H'};
