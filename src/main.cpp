@@ -123,6 +123,7 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 
 }
 void autonomous() {
+	// define everything
 	Drivetrain drivetrain{ ports::LEFT_BACK_MOTOR, ports::RIGHT_BACK_MOTOR, ports::LEFT_FRONT_MOTOR, ports::RIGHT_FRONT_MOTOR, ports::LEFT_MIDDLE_MOTOR, ports::RIGHT_MIDDLE_MOTOR };
 	Intake intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
 	Expansion expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
@@ -131,13 +132,14 @@ void autonomous() {
 	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 	pros::Task::delay(1000);	
 
-
+	// motor group
 	okapi::MotorGroup left_m = okapi::MotorGroup({ okapi::Motor(ports::LEFT_BACK_MOTOR), okapi::Motor( ports::LEFT_MIDDLE_MOTOR), okapi::Motor(ports::LEFT_FRONT_MOTOR)});
 	okapi::MotorGroup right_m = okapi::MotorGroup ({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)});
 	
+	// pid chassis
 	auto chass = build_PID(left_m, right_m, ports::INERTIAL_1, ports::INERTIAL_2);
-	auto odom = build_odometry (left_m, right_m);
 
+	// encoders 
 	okapi::IntegratedEncoder left_front_encoder = okapi::IntegratedEncoder(ports::LEFT_FRONT_MOTOR);
 	okapi::IntegratedEncoder left_middle_encoder = okapi::IntegratedEncoder(ports::LEFT_MIDDLE_MOTOR);
 	okapi::IntegratedEncoder left_back_encoder = okapi::IntegratedEncoder(ports::LEFT_BACK_MOTOR);
@@ -157,21 +159,6 @@ void autonomous() {
 	right_middle_encoder.reset(); 
 	right_back_encoder.reset();
 
-	// so we can launch farther for auton
-	// expansion.trigger();
-
-	std::printf("move forward 2ft\n");
-	
+	// call auton method
 	auton_indirect(chass, roller, catapult,intake, buttonText);
-	
 }
-// void autonomous() {
-	// pros::Task::delay(100);
-	// pros::ADIDigitalOut dig = pros::ADIDigitalOut{'H'};
-	// dig.set_value(false);
-	// std::printf("changed to false");
-	// pros::Task::delay(300);
-	// dig.set_value(true);
-
-// }
-
