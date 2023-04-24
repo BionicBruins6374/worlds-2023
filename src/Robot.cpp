@@ -72,7 +72,6 @@ void Robot::update_catapult() {
 		// launches catapult forward
 		// pros::Task::create(cata_task, (Catapult* ) m_catapult, 1, "cata spin");
 		pros::c::task_create(cata_task, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
-
 		// m_catapult.spin_motor(0);
 		// m_catapult.spin_motor(1);
 		std::printf("%d", m_catapult.switch_ideal_value); 

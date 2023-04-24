@@ -69,7 +69,11 @@ void opcontrol() {
 	}
 }
 
-
+void launch_piston(void* hi) {
+	pros::ADIDigitalOut pissLeft = pros::ADIDigitalOut{ports::EXPANSION_PISTON_LEFT};
+	// pros::ADIDigitalOut pissRight = pros::ADIDigitalOut{ports::EXPANSION_PISTON_RIGHT};
+	pissLeft.set_value(true); 
+}
 
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color) {
 	// start facing left if at top
@@ -88,7 +92,11 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	chassis->turnAngle(-90_deg);
 
 	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) - 0.1) * 1_ft );
-	cata.spin_motor(9000);
+	
+	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+	cata.spin_motor(0);
+	cata.spin_motor(1);
+
 	chassis->moveDistance(0.1_ft); // move a tiny bit more forward (the 0.1)
 	chassis->turnAngle(360_deg);
 	
@@ -150,7 +158,7 @@ void autonomous() {
 	right_back_encoder.reset();
 
 	// so we can launch farther for auton
-	expansion.trigger();
+	// expansion.trigger();
 
 	std::printf("move forward 2ft\n");
 	
