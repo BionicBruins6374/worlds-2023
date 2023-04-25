@@ -60,15 +60,22 @@ void Robot::update_roller(std::string color) {
 	pros::delay(100);
 }
 
-void Robot::cata_task(void* par) {
+// void Robot::cata_task(void* par) {
 	
-	new_cata.spin_motor(0);
-	new_cata.spin_motor(1);
-}
+// 	new_cata.spin_motor(0);
+// 	new_cata.spin_motor(1);
+// }
 
 void func(void* catapult) {
 	((Catapult*) &catapult)->spin_motor(1);
 }
+
+void cata_task(void* par) {
+
+	new_cata.spin_motor(0);
+	new_cata.spin_motor(1);
+}
+
 
 void Robot::update_catapult() {
 	// to shoot it, already in launch position 
@@ -77,7 +84,12 @@ void Robot::update_catapult() {
 		// pros::Task::create(cata_task, (Catapult* ) m_catapult, 1, "cata spin");
 		// pros::c::task_create(cata_task, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 		
-		pros::Task(func, (void*) &m_catapult);
+		// pros::Task(func, (void*) &m_catapult);
+
+		// pros::c::task_create(cata_task, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+		m_catapult.spin_motor(1);
+		m_catapult.spin_motor(0);
+
 
 		// m_catapult.spin_motor(0);
 		// m_catapult.spin_motor(1);

@@ -33,7 +33,7 @@ public:
 	void update();
 	void update(std::string color);
 	Catapult get_cata(); 
-	void cata_task(void* rand);
+	// void cata_task(void* rand);
 
 
 };
