@@ -145,16 +145,57 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 	// shoot cata
 
 }
-void auton_roller_side() {          
+void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
 	// roller
+	chassis->moveDistance((t-1.5) * 1_ft);
+	robot.autonomous_spin(alliance_color);
+	pros::Task::delay(2000);
+	intake.toggle(false);
 	// move backward 
-	// spin 180 to intake
-	// spin 180 to catapult
-	// spin counterclock wise 135
+	chassis->moveDistance((t-1.5) * -1_ft);
+	//Turns to face goal
+	chassis->turnAngle(-10_deg);
+	//Shoots cata
+	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+	cata.spin_motor(0);
+	cata.spin_motor(1);
+	//turn -135 degrees 
+	chassis->turnAngle(-125_deg);
 	// move to disk (3 stack)
+	chassis->moveDistance(sqrt( (pow((3*t/2),2) + pow((t - r + t/2),2) ) ) * 1_ft);
 	// intake it
-	// shoot cata
-	// counter clockwise 22.5
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+	//moves forward a bit and intakes a disc
+	chassis->moveDistance(t * 1_ft);
+	chassis->turnAngle(45_deg);
+	chassis->moveDistance(t * 1_ft);
+	//move back a bit
+	chassis->moveDistance(t * 1_ft);
+	//Turn 90 degrees and move forward
+	chassis->turnAngle(90_deg);
+	chassis->moveDistance(t * 1_ft);
+	//Turn 90 degrees back and intake
+	chassis->turnAngle(-90_deg);
+	chassis->moveDistance((t-1.5) * 1_ft);
+
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+	//Move back a bit and turn -135 degrees
+	chassis->moveDistance(t * 1_ft);
+	chassis->turnAngle(-135_deg);
+	//Move forward until reach mid, then intake
+	chassis->moveDistance(t * 1_ft);
+
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+	//Shoots cata
+	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+	cata.spin_motor(0);
+	cata.spin_motor(1);
 	// move forward 1/2 diagonal of tile 
 	// clockwise 45 deg
 	// forward 1 tile - disk size 
@@ -162,16 +203,16 @@ void auton_roller_side() {
 	// move forward one tile
 
 }
-void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color) {
+void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	
 	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(-90_deg); // clockwise 
 
-	chassis->moveDistance((t-18) * 1_ft);
+	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
 	
-	// roller
-	roller.main_spin_roller(1, alliance_color);
-
+	robot.autonomous_spin(alliance_color); // roller
+	pros::delay(2000);
+	
 	chassis->moveDistance((t-18) * -1_ft);
 	
 	chassis->turnAngle(-135_deg);
@@ -184,7 +225,6 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 	cata.spin_motor(0);
 	cata.spin_motor(1);
-
 
 	chassis->moveDistance(0.1_ft); // move a tiny bit more forward (the 0.1)
 	chassis->turnAngle(360_deg);
@@ -241,6 +281,7 @@ void autonomous() {
 	std::printf("left front: %f \n", left_front_encoder.get());
 	std::printf("right front: %f \n", right_front_encoder.get());
 
+
 	left_front_encoder.reset(); 
 	left_middle_encoder.reset(); 
 	left_back_encoder.reset(); 
@@ -249,6 +290,11 @@ void autonomous() {
 	right_back_encoder.reset();
 
 	// call auton method
-	auton_indirect(chass, roller, catapult,intake, buttonText);
-
+	if (autonSelect == "i") {
+		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
+	} else if (autonSelect == "s") {
+		auton_sole(chass, roller, catapult, intake);
+	} else if (autonSelect == "r") {
+		auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
+	}
 }
