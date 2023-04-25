@@ -130,16 +130,57 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 	// shoot cata
 
 }
-void auton_roller_side() {          
+void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
 	// roller
+	chassis->moveDistance((t-1.5) * 1_ft);
+	robot.autonomous_spin(alliance_color);
+	pros::Task::delay(2000);
+	intake.toggle(false);
 	// move backward 
-	// spin 180 to intake
-	// spin 180 to catapult
-	// spin counterclock wise 135
+	chassis->moveDistance((t-1.5) * -1_ft);
+	//Turns to face goal
+	chassis->turnAngle(-10_deg);
+	//Shoots cata
+	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+	cata.spin_motor(0);
+	cata.spin_motor(1);
+	//turn -135 degrees 
+	chassis->turnAngle(-125_deg);
 	// move to disk (3 stack)
+	chassis->moveDistance(sqrt( (pow((3*t/2),2) + pow((t - r + t/2),2) ) ) * 1_ft);
 	// intake it
-	// shoot cata
-	// counter clockwise 22.5
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+	//moves forward a bit and intakes a disc
+	chassis->moveDistance();
+	chassis->turnAngle(45_deg);
+	chassis->moveDistance();
+	//move back a bit
+	chassis->moveDistance();
+	//Turn 90 degrees and move forward
+	chassis->turnAngle(90_deg);
+	chassis->moveDistance();
+	//Turn 90 degrees back and intake
+	chassis->turnAngle(-90_deg);
+	chassis->moveDistance((t-1.5) * 1_ft);
+
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+	//Move back a bit and turn -135 degrees
+	chassis->moveDistance();
+	chassis->turnAngle(-135_deg);
+	//Move forward until reach mid, then intake
+	chassis->moveDistance();
+
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
+	//Shoots cata
+	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+	cata.spin_motor(0);
+	cata.spin_motor(1);
 	// move forward 1/2 diagonal of tile 
 	// clockwise 45 deg
 	// forward 1 tile - disk size 
@@ -147,16 +188,23 @@ void auton_roller_side() {
 	// move forward one tile
 
 }
-void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
-	
+void launch_piston(void* hi) {
+	pros::ADIDigitalOut pissLeft = pros::ADIDigitalOut{ports::EXPANSION_PISTON_LEFT};
+	// pros::ADIDigitalOut pissRight = pros::ADIDigitalOut{ports::EXPANSION_PISTON_RIGHT};
+	pissLeft.set_value(true); 
+}
+
+void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
+	// start facing left if at top
 	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(-90_deg); // clockwise 
 
-	chassis->moveDistance((t-18) * 1_ft);
+	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
 	
-	// roller
+	roller.autonomous_spin(alliance_color); // roller
+	pros::delay(2000);
 
-	chassis->moveDistance((t-18) * -1_ft);
+	chassis->moveDistance((t-1.5) * -1_ft);
 	
 	chassis->turnAngle(-135_deg);
 
@@ -164,7 +212,11 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	chassis->turnAngle(-90_deg);
 
 	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) - 0.1) * 1_ft );
-	cata.spin_motor(9000);
+	
+	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+	cata.spin_motor(0);
+	cata.spin_motor(1);
+
 	chassis->moveDistance(0.1_ft); // move a tiny bit more forward (the 0.1)
 	chassis->turnAngle(360_deg);
 	
@@ -189,20 +241,50 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	pros::Task::delay(2000);
 	intake.toggle(false);
 
-	chassis->turnAngle(45_deg); // counter clock 45 
-	chassis->moveDistance(t* 1_ft);
-
-} 
-
-
+}
 void autonomous() {
-	// Drivetrain const drivetrain{ ports::LEFT_BACK_MOTOR, ports::RIGHT_BACK_MOTOR, ports::LEFT_FRONT_MOTOR, ports::RIGHT_FRONT_MOTOR, ports::LEFT_MIDDLE_MOTOR, ports::RIGHT_MIDDLE_MOTOR };
-	// Intake const intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
-	// Expansion const expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
-	// Roller const roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
-	// Catapult const catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
-	// Robot robot{ drivetrain, intake, expansion, roller, catapult, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK};
+	// define everything
+	Drivetrain drivetrain{ ports::LEFT_BACK_MOTOR, ports::RIGHT_BACK_MOTOR, ports::LEFT_FRONT_MOTOR, ports::RIGHT_FRONT_MOTOR, ports::LEFT_MIDDLE_MOTOR, ports::RIGHT_MIDDLE_MOTOR };
+	Intake intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
+	Expansion expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
+	Roller roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
+	Catapult catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
+	Robot robot{ drivetrain, intake, expansion, roller, catapult};
+	pros::Task::delay(1000);	
 
+	// motor group
+	okapi::MotorGroup left_m = okapi::MotorGroup({ okapi::Motor(ports::LEFT_BACK_MOTOR), okapi::Motor( ports::LEFT_MIDDLE_MOTOR), okapi::Motor(ports::LEFT_FRONT_MOTOR)});
+	okapi::MotorGroup right_m = okapi::MotorGroup ({okapi::Motor(ports::RIGHT_BACK_MOTOR), okapi::Motor(ports::RIGHT_MIDDLE_MOTOR), okapi::Motor(ports::RIGHT_FRONT_MOTOR)});
 	
+	// pid chassis
+	auto chass = build_PID(left_m, right_m, ports::INERTIAL_1, ports::INERTIAL_2);
 
+	// encoders 
+	okapi::IntegratedEncoder left_front_encoder = okapi::IntegratedEncoder(ports::LEFT_FRONT_MOTOR);
+	okapi::IntegratedEncoder left_middle_encoder = okapi::IntegratedEncoder(ports::LEFT_MIDDLE_MOTOR);
+	okapi::IntegratedEncoder left_back_encoder = okapi::IntegratedEncoder(ports::LEFT_BACK_MOTOR);
+	okapi::IntegratedEncoder right_front_encoder = okapi::IntegratedEncoder(ports::RIGHT_FRONT_MOTOR);
+	okapi::IntegratedEncoder right_middle_encoder = okapi::IntegratedEncoder(ports::RIGHT_MIDDLE_MOTOR);
+	okapi::IntegratedEncoder right_back_encoder = okapi::IntegratedEncoder(ports::RIGHT_BACK_MOTOR);
+
+	std::printf("left back: %f \n", left_back_encoder.get());
+	std::printf("right back: %f \n", right_back_encoder.get());
+	std::printf("left front: %f \n", left_front_encoder.get());
+	std::printf("right front: %f \n", right_front_encoder.get());
+
+	left_front_encoder.reset(); 
+	left_middle_encoder.reset(); 
+	left_back_encoder.reset(); 
+	right_front_encoder.reset(); 
+	right_middle_encoder.reset(); 
+	right_back_encoder.reset();
+
+	// call auton method
+	if (autonSelect == "i") {
+		auton_indirect(chass, roller, catapult,intake, buttonText);
+	} else if (autonSelect == "s") {
+		auton_sole();
+	} else if (autonSelect == "r") {
+		auton_roller_side();
+	}
 }
