@@ -20,14 +20,21 @@ void Robot::update_drivetrain() {
 		m_drivetrain.update(80, 0);
 	}
 }
-void Robot::update_intake() {
+void Robot::update_intake_roller(std::string color) {
+	m_roller.turn_light_on();
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-		std::printf("L1 Pressed");
 		m_intake.toggle(false);
+		std::printf("%d\n",m_roller.checkForOptical(color));
+		if (m_roller.checkForOptical(color) == 1) {
+			m_intake.toggle(false);
+		}
 	}
 	else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-		std::printf("L2 Pressed");
 		m_intake.toggle(true);
+		std::printf("%d\n",m_roller.checkForOptical(color));
+		if (m_roller.checkForOptical(color) == 1) {
+			m_intake.toggle(false);
+		}
 	}
 }
 void Robot::update_expansion() {
@@ -42,23 +49,6 @@ void Robot::update_expansion() {
 	
 }
 
-void Robot::update_roller(std::string color) {
-	// switch from optical sensor to roller when primary controller tries to use roller
-	// m_roller.turn_light_on();
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
-		if (m_roller.checkForOptical(color) == true) {
-			m_roller.optical_spin(color,1);
-		}
-		m_roller.optical_spin(color,1);
-	}
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2) || m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
-		if (m_roller.checkForOptical(color) == true) {
-		m_roller.optical_spin(color,-1);
-		}
-	}
-
-	pros::delay(100);
-}
 
 // void Robot::cata_task(void* par) {
 	
@@ -115,11 +105,9 @@ void Robot::update_catapult() {
 
 void Robot::update(std::string color) {
 	update_drivetrain();
-	update_intake();
+	update_intake_roller(color);
 	update_expansion();
-	update_roller(color);
 	update_catapult();
-	// std::printf("%d\n",m_roller.checkForOptical(color));
 }
 
 

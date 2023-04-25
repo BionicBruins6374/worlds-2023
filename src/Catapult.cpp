@@ -74,6 +74,7 @@ void Catapult::spin_motor(int voltage_option) {
             break;
         }
         pros::Task::delay(50);
+
     }
     if (switch_ideal_value == 1) { switch_ideal_value = 0;}
     else { switch_ideal_value = 1; }
@@ -90,4 +91,3 @@ void Catapult::spin_motor_no_limit(double shift_amount) {
 void Catapult::set_voltage(double voltage) {
     m_motor.move_voltage(voltage);
 }
-
