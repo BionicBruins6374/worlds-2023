@@ -15,5 +15,8 @@ public:
 
 	void spin_motor_no_limit(double shift_amount);
 	void set_voltage(double voltage);
-	int switch_ideal_value = 1;
+	int switch_ideal_value = 0;
+	double get_voltage();
+	void break_cata();
 };
+

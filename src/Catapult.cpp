@@ -1,6 +1,7 @@
 #include <cmath>
 #include <cstdint>
 #include <iostream>
+#include "pros/misc.hpp"
 #include "pros/rtos.hpp"
 #include "pros/motors.hpp"
 #include "pros/adi.hpp"
@@ -78,6 +79,7 @@ void Catapult::spin_motor(int voltage_option) {
     }
     if (switch_ideal_value == 1) { switch_ideal_value = 0;}
     else { switch_ideal_value = 1; }
+    // break_cata();
     m_motor.move_voltage(0);
 	} };
 }
@@ -91,3 +93,16 @@ void Catapult::spin_motor_no_limit(double shift_amount) {
 void Catapult::set_voltage(double voltage) {
     m_motor.move_voltage(voltage);
 }
+
+double Catapult::get_voltage() {
+    return m_motor.get_actual_velocity();
+}
+
+void Catapult::break_cata() {
+    m_motor.move_voltage(0);
+    double init_pos = m_motor.get_position();
+    while (!((init_pos * 0.95 < m_motor.get_position()) && (init_pos * 1.05 > m_motor.get_position()))) {
+        m_motor.move_voltage(-4000);
+    }
+}
+

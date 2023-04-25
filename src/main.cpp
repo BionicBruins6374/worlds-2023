@@ -109,9 +109,11 @@ void opcontrol() {
 	
 	while (true) {
 		robot.update(buttonText);
-		std::printf("hiii");
+		// std::printf("wo");
+		std::printf("Velocity: %f", catapult.get_voltage());
 
 		pros::Task::delay(1);
+		
 	}
 }
 
@@ -169,7 +171,7 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	
 	// roller
 	roller.main_spin_roller(1, alliance_color);
-	
+
 	chassis->moveDistance((t-18) * -1_ft);
 	
 	chassis->turnAngle(-135_deg);
