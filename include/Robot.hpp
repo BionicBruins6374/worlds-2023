@@ -22,7 +22,6 @@ private:
 	void update_drivetrain();
 	void update_intake_roller(std::string color);
 	void update_expansion();
-
 	void update_catapult();
 	void update_controller(); 
 public:
@@ -30,6 +29,7 @@ public:
 	Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller roller, Catapult catapult);
 	void update();
 	void update(std::string color);
+	void autonomous_spin(std::string color);
 	Catapult get_cata();
 };
 

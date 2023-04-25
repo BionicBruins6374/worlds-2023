@@ -9,7 +9,7 @@ void Robot::update_controller() {
 	m_controller_partner.print(1,1, "Intake Motor Temp: %f", m_intake.get_temp());
 }
 
-Catapult new_cata = Catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
+//Catapult new_cata = Catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
 
 void Robot::update_drivetrain() {
 
@@ -25,15 +25,27 @@ void Robot::update_intake_roller(std::string color) {
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
 		m_intake.toggle(false);
 		std::printf("%d\n",m_roller.checkForOptical(color));
-		if (m_roller.checkForOptical(color) == 1) {
-			m_intake.toggle(false);
+		while(true) {
+			if (m_roller.checkForOptical(color) == 1) {
+				m_intake.toggle(false);
+				break;
+			} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+				m_intake.toggle(false);
+				break;
+			}
 		}
 	}
 	else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
 		m_intake.toggle(true);
 		std::printf("%d\n",m_roller.checkForOptical(color));
-		if (m_roller.checkForOptical(color) == 1) {
-			m_intake.toggle(false);
+		while(true) {
+			if (m_roller.checkForOptical(color) == 1) {
+				m_intake.toggle(false);
+				break;
+			} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+				m_intake.toggle(false);
+				break;
+			}
 		}
 	}
 }

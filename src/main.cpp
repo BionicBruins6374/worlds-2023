@@ -7,6 +7,7 @@
 #include "ports.hpp"
 #include "odometry.hpp"
 #include "Expansion.hpp"
+#include "Inertial.hpp"
 #include "okapi/impl/device/motor/motor.hpp"
 #include "okapi/impl/device/motor/motorGroup.hpp"
 #include "cmath"
@@ -102,13 +103,17 @@ void opcontrol() {
 	
 	while (true) {
 		robot.update(buttonText);
-		std::printf("hiii");
-
 		pros::Task::delay(1);
 	}
 }
 
-void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
+void launch_piston(void* hi) {
+	pros::ADIDigitalOut pissLeft = pros::ADIDigitalOut{ports::EXPANSION_PISTON_LEFT};
+	// pros::ADIDigitalOut pissRight = pros::ADIDigitalOut{ports::EXPANSION_PISTON_RIGHT};
+	pissLeft.set_value(true); 
+}
+
+void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	// roller
 	// move backward 
 	// spin 180 to intake
@@ -131,6 +136,7 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 
 }
 void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
+	/**
 	// roller
 	chassis->moveDistance((t-1.5) * 1_ft);
 	robot.autonomous_spin(alliance_color);
@@ -186,13 +192,10 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	// forward 1 tile - disk size 
 	// turn 90 deg
 	// move forward one tile
+	*/
 
 }
-void launch_piston(void* hi) {
-	pros::ADIDigitalOut pissLeft = pros::ADIDigitalOut{ports::EXPANSION_PISTON_LEFT};
-	// pros::ADIDigitalOut pissRight = pros::ADIDigitalOut{ports::EXPANSION_PISTON_RIGHT};
-	pissLeft.set_value(true); 
-}
+
 
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	// start facing left if at top
@@ -201,7 +204,7 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 
 	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
 	
-	roller.autonomous_spin(alliance_color); // roller
+	robot.autonomous_spin(alliance_color); // roller
 	pros::delay(2000);
 
 	chassis->moveDistance((t-1.5) * -1_ft);
@@ -283,7 +286,7 @@ void autonomous() {
 	if (autonSelect == "i") {
 		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "s") {
-		auton_sole();
+		auton_sole(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "r") {
 		auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
 	}
