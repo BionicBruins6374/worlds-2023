@@ -281,10 +281,10 @@ void autonomous() {
 
 	// call auton method
 	if (autonSelect == "i") {
-		auton_indirect(chass, roller, catapult,intake, buttonText);
+		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "s") {
 		auton_sole();
 	} else if (autonSelect == "r") {
-		auton_roller_side();
+		auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
 	}
 }
