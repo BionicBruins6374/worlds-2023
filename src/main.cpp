@@ -109,9 +109,6 @@ void opcontrol() {
 	
 	while (true) {
 		robot.update(buttonText);
-		// std::printf("wo");
-		std::printf("Velocity: %f", catapult.get_voltage());
-
 		pros::Task::delay(1);
 		
 	}
@@ -123,7 +120,8 @@ void launch_piston(void* hi) {
 	pissLeft.set_value(true); 
 }
 
-void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
+
+void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	// roller
 	// move backward 
 	// spin 180 to intake
@@ -146,6 +144,7 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 
 }
 void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
+	/**
 	// roller
 	chassis->moveDistance((t-1.5) * 1_ft);
 	robot.autonomous_spin(alliance_color);
@@ -201,8 +200,10 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	// forward 1 tile - disk size 
 	// turn 90 deg
 	// move forward one tile
+	*/
 
 }
+
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	
 	chassis->moveDistance(t * 1_ft);
@@ -293,7 +294,7 @@ void autonomous() {
 	if (autonSelect == "i") {
 		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "s") {
-		auton_sole(chass, roller, catapult, intake);
+		auton_sole(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "r") {
 		auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
 	}
