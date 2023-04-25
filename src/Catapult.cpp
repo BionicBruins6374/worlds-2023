@@ -45,12 +45,11 @@ Catapult::Catapult(int8_t motor_port, std::uint8_t port)
 void Catapult::spin_motor(int voltage_option) {
     const int timeout = 3000; // set timeout to 3 seconds
     uint32_t start_time = pros::millis();
-    // spin it till its not the ideal value, 
-
-    while (!(m_limit_switch.get_value() == switch_ideal_value)) {
+    // spin it till its not the ideal value
+    while (m_limit_switch.get_value() != switch_ideal_value) {
         m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
         if (pros::millis() - start_time > timeout) {
-            std::printf("Spin motor timeout reached");
+            std::printf("Catapult motor timeout reached");
             break;
         }
         pros::Task::delay(50);
@@ -60,8 +59,27 @@ void Catapult::spin_motor(int voltage_option) {
     else { switch_ideal_value = 1; }
 
     m_motor.move_voltage(0);
-    
 }
+
+// void Catapult::spin_motor(int voltage_option) {
+//     pros::Task{ [this, voltage_option] {
+// 	const int timeout = 3000; // set timeout to 3 seconds
+//     uint32_t start_time = pros::millis();
+
+//     // spin it till its not the ideal value
+//     while (!(m_limit_switch.get_value() == switch_ideal_value)) {
+//         m_motor.move_voltage(constants::CATAPULT_VOLTAGE[voltage_option]);
+//         if (pros::millis() - start_time > timeout) {
+//             std::printf("Spin motor timeout reached");
+//             break;
+//         }
+//         pros::Task::delay(50);
+//     }
+//     if (switch_ideal_value == 1) { switch_ideal_value = 0;}
+//     else { switch_ideal_value = 1; }
+//     m_motor.move_voltage(0);
+// 	} };
+// }
 
 void Catapult::spin_motor_no_limit(double shift_amount) {
     m_motor.set_encoder_units(pros::E_MOTOR_ENCODER_ROTATIONS);

@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "aTest2",
+    "project_name": "HIGUYS",
     "target": "v5",
     "templates": {
       "kernel": {
@@ -309,8 +309,8 @@
       }
     },
     "upload_options": {
-      "icon": "alien",
-      "slot": 4
+      "icon": "robot",
+      "slot": 1
     }
   }
 }

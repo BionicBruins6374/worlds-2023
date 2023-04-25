@@ -60,10 +60,14 @@ void Robot::update_roller(std::string color) {
 	pros::delay(100);
 }
 
-void cata_task(void* par) {
+void Robot::cata_task(void* par) {
 	
 	new_cata.spin_motor(0);
 	new_cata.spin_motor(1);
+}
+
+void func(void* catapult) {
+	((Catapult*) &catapult)->spin_motor(1);
 }
 
 void Robot::update_catapult() {
@@ -71,7 +75,10 @@ void Robot::update_catapult() {
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_X)) {
 		// launches catapult forward
 		// pros::Task::create(cata_task, (Catapult* ) m_catapult, 1, "cata spin");
-		pros::c::task_create(cata_task, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+		// pros::c::task_create(cata_task, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
+		
+		pros::Task(func, (void*) &m_catapult);
+
 		// m_catapult.spin_motor(0);
 		// m_catapult.spin_motor(1);
 		std::printf("%d", m_catapult.switch_ideal_value); 
