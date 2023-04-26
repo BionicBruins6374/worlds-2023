@@ -22,9 +22,9 @@ void Robot::update_drivetrain() {
 		m_drivetrain.update(80, 0);
 	}
 }
-void Robot::update_intake_roller(std::string color) {
-	m_roller.turn_light_on();
-	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+
+void Robot::spinRollerIntake(std::string color) {
+	pros::Task { [this, color] {
 		m_intake.toggle(false);
 		while(true) {
 			if (m_roller.checkForOptical(color) == 1) {
@@ -35,8 +35,10 @@ void Robot::update_intake_roller(std::string color) {
 				break;
 			}
 		}
-	}
-	else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+	} };
+}
+void Robot::spinOppositeRoller(std::string color) {
+	pros::Task { [this, color] {
 		m_intake.toggle(true);
 		std::printf("%d\n",m_roller.checkForOptical(color));
 		while(true) {
@@ -47,8 +49,18 @@ void Robot::update_intake_roller(std::string color) {
 				m_intake.toggle(true);
 				break;
 			}
+			pros::Task::delay()
 		}
-	}
+	} };
+}
+
+void Robot::update_intake_roller(std::string color) {
+	m_roller.turn_light_on();
+		if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+			spinRollerIntake(color);
+		} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+			spinOppositeRoller(color);
+		}
 }
 
 void Robot::autonomous_spin(std::string color) {

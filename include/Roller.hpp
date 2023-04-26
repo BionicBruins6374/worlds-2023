@@ -27,7 +27,7 @@ public:
 	};
 
 
-	RollerType roller_type = MANUAL_CONTROL;
+	RollerType roller_type = OPTICAL;
 
 	Roller(int8_t const port, bool redOrBlue, int8_t optical_front_port, int8_t optical_side_port);
 	void switch_color() const;
