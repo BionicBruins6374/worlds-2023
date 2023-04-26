@@ -146,61 +146,53 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 
 }
 void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
-	// roller
+	double theta_two = atan( (1.5 * t) / (0.5 * t));
+	// move to roller
 	chassis->moveDistance((t-1.5) * 1_ft);
 	robot.autonomous_spin(alliance_color);
 	pros::Task::delay(2000);
 	intake.toggle(false);
 	// move backward 
 	chassis->moveDistance((t-1.5) * -1_ft);
+	// Turn to intake disk
+	chassis->turnAngle(180_deg);
+	pros::Task::delay(500);
 	//Turns to face goal
-	chassis->turnAngle(-10_deg);
+	chassis->turnAngle(180_deg);
+	intake.toggle(false);
 	//Shoots cata
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 	cata.spin_motor(0);
 	cata.spin_motor(1);
-	//turn -135 degrees 
-	chassis->turnAngle(-125_deg);
+	//turn angle to face 3 stack, ccw
+	chassis->turnAngle( (180.0 - theta_two) * 1_deg);
 	// move to disk (3 stack)
-	chassis->moveDistance(sqrt( (pow((3*t/2),2) + pow((t - r + t/2),2) ) ) * 1_ft);
+	chassis->moveDistance(sqrt(pow(1.5 * t,2)+  pow(0.5 * t, 2)) * 1_ft);
 	// intake it
 	intake.toggle(false);
 	pros::Task::delay(2000);
 	intake.toggle(false);
-	//moves forward a bit and intakes a disc
-	chassis->moveDistance(t * 1_ft);
-	chassis->turnAngle(45_deg);
-	chassis->moveDistance(t * 1_ft);
-	//move back a bit
-	chassis->moveDistance(t * 1_ft);
-	//Turn 90 degrees and move forward
-	chassis->turnAngle(90_deg);
-	chassis->moveDistance(t * 1_ft);
-	//Turn 90 degrees back and intake
-	chassis->turnAngle(-90_deg);
-	chassis->moveDistance((t-1.5) * 1_ft);
 
-	intake.toggle(false);
-	pros::Task::delay(2000);
-	intake.toggle(false);
-	//Move back a bit and turn -135 degrees
-	chassis->moveDistance(t * 1_ft);
-	chassis->turnAngle(-135_deg);
-	//Move forward until reach mid, then intake
-	chassis->moveDistance(t * 1_ft);
-
-	intake.toggle(false);
-	pros::Task::delay(2000);
-	intake.toggle(false);
-	//Shoots cata
+	chassis->turnAngle(-90_deg); // turn to face high goal
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 	cata.spin_motor(0);
 	cata.spin_motor(1);
-	// move forward 1/2 diagonal of tile 
-	// clockwise 45 deg
-	// forward 1 tile - disk size 
-	// turn 90 deg
-	// move forward one tile
+
+	// move angle to 45 deg facing disk
+	chassis->turnAngle((90 + theta_two) * 1_deg); // counter clockwise, don't think this is right
+	chassis->moveDistance((sqrt( 2.0) * 0.25 )* 1_ft) ; //  sqrt(0.5^2 + 0.5^t) = sqrt(2 * 0.5^2)
+
+	intake.toggle(false);
+
+	chassis->turnAngle(-45_deg); // clockwise
+	chassis->moveDistance(t * 1_ft); // move to low goal disk
+
+	chassis->turnAngle(-90_deg); // clockwise, turn to intake second disk
+	chassis->moveDistance((t - 0.25) * 1_ft) ; // fine tune this distance
+
+	chassis->turnAngle(45_deg) ; // make flywheel face high goal
+	intake.toggle(false);
+	chassis->moveDistance(sqrt(t * t + pow(1.5 * t, 2)) * ( 1_ft));
 
 }
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
@@ -234,7 +226,7 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	pros::Task::delay(2000);
 	intake.toggle(false);
 
-	chassis->turnAngle(90_deg); // counterclock 90
+	chassis->turnAngle(90_deg); // counter clock 90
 	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
 	
 	// intake
@@ -243,7 +235,7 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	intake.toggle(false);
 
 	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
-	chassis->turnAngle(90_deg); // counterclock 90
+	chassis->turnAngle(90_deg); // counter clock 90
 	
 	// intake
 	intake.toggle(false);
@@ -289,12 +281,13 @@ void autonomous() {
 	right_middle_encoder.reset(); 
 	right_back_encoder.reset();
 
-	// call auton method
-	if (autonSelect == "i") {
-		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
-	} else if (autonSelect == "s") {
-		auton_sole(chass, roller, catapult, intake);
-	} else if (autonSelect == "r") {
-		auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
-	}
+	// // call auton method
+	// if (autonSelect == "i") {
+	// 	auton_indirect(chass, roller, catapult,intake, buttonText, robot);
+	// } else if (autonSelect == "s") {
+	// 	auton_sole(chass, roller, catapult, intake);
+	// } else if (autonSelect == "r") {
+	// 	auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
+	// }
+	
 }
