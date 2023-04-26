@@ -34,6 +34,7 @@ void Robot::spinRollerIntake(std::string color) {
 				m_intake.toggle(false);
 				break;
 			}
+			pros::Task::delay(5);
 		}
 	} };
 }
@@ -49,7 +50,7 @@ void Robot::spinOppositeRoller(std::string color) {
 				m_intake.toggle(true);
 				break;
 			}
-			pros::Task::delay()
+			pros::Task::delay(5);
 		}
 	} };
 }
