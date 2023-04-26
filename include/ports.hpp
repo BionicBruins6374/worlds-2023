@@ -6,8 +6,8 @@
 namespace ports {
 
 // constexpr uint8_t PISTON_INDEXER = 'A';
-constexpr uint8_t EXPANSION_PISTON_LEFT = 'A';
-constexpr uint8_t EXPANSION_PISTON_RIGHT = 'C';
+constexpr uint8_t EXPANSION_PISTON_LEFT = 'G';
+constexpr uint8_t EXPANSION_PISTON_RIGHT = 'H';
 
 constexpr int8_t OPTICAL_SENSOR = 20;
 constexpr int8_t OPTICAL_SENSOR_BACK = 21;

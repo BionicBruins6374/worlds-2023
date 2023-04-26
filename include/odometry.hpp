@@ -4,4 +4,4 @@
 
 using namespace okapi;
 
-std::shared_ptr<OdomChassisController> build_odometry(pros::MotorGroup left_motor, pros::MotorGroup right_motor);
+std::shared_ptr<OdomChassisController> build_odometry(okapi::MotorGroup left_motor, okapi::MotorGroup right_motor);
