@@ -109,9 +109,6 @@ void opcontrol() {
 	
 	while (true) {
 		robot.update(buttonText);
-		// std::printf("wo");
-		std::printf("Velocity: %f", catapult.get_voltage());
-
 		pros::Task::delay(1);
 		
 	}
@@ -123,7 +120,8 @@ void launch_piston(void* hi) {
 	pissLeft.set_value(true); 
 }
 
-void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake) {
+
+void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	// roller
 	// move backward 
 	// spin 180 to intake
@@ -152,7 +150,7 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	robot.autonomous_spin(alliance_color);
 	pros::Task::delay(2000);
 	intake.toggle(false);
-	// move backward 
+	// move backward and intake
 	chassis->moveDistance((t-1.5) * -1_ft);
 	// Turn to intake disk
 	chassis->turnAngle(180_deg);
@@ -160,6 +158,7 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	//Turns to face goal
 	chassis->turnAngle(180_deg);
 	intake.toggle(false);
+
 	//Shoots cata
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 	cata.spin_motor(0);
@@ -168,6 +167,7 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	chassis->turnAngle( (180.0 - theta_two) * 1_deg);
 	// move to disk (3 stack)
 	chassis->moveDistance(sqrt(pow(1.5 * t,2)+  pow(0.5 * t, 2)) * 1_ft);
+
 	// intake it
 	intake.toggle(false);
 	pros::Task::delay(2000);
@@ -194,7 +194,9 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	intake.toggle(false);
 	chassis->moveDistance(sqrt(t * t + pow(1.5 * t, 2)) * ( 1_ft));
 
+
 }
+
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	
 	chassis->moveDistance(t * 1_ft);
@@ -281,13 +283,13 @@ void autonomous() {
 	right_middle_encoder.reset(); 
 	right_back_encoder.reset();
 
-	// // call auton method
-	// if (autonSelect == "i") {
-	// 	auton_indirect(chass, roller, catapult,intake, buttonText, robot);
-	// } else if (autonSelect == "s") {
-	// 	auton_sole(chass, roller, catapult, intake);
-	// } else if (autonSelect == "r") {
-	// 	auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
-	// }
-	
+
+	// call auton method
+	if (autonSelect == "i") {
+		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
+	} else if (autonSelect == "s") {
+		auton_sole(chass, roller, catapult,intake, buttonText, robot);
+	} else if (autonSelect == "r") {
+		auton_roller_side(chass, roller, catapult,intake, buttonText, robot);
+	}
 }

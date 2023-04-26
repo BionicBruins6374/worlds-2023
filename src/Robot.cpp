@@ -25,23 +25,30 @@ void Robot::update_drivetrain() {
 }
 void Robot::update_intake_roller(std::string color) {
 	m_roller.turn_light_on();
-
-	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1) ) {
-		m_roller.switch_type(); 
-	}
-	
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
 		m_intake.toggle(false);
 		std::printf("%d\n",m_roller.checkForOptical(color));
-		if (m_roller.roller_type == Roller::OPTICAL && m_roller.checkForOptical(color) == 1) {
-			m_intake.toggle(false);
+		while(true) {
+			if (m_roller.checkForOptical(color) == 1) {
+				m_intake.toggle(false);
+				break;
+			} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
+				m_intake.toggle(false);
+				break;
+			}
 		}
 	}
 	else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
 		m_intake.toggle(true);
 		std::printf("%d\n",m_roller.checkForOptical(color));
-		if (m_roller.roller_type == Roller::OPTICAL && m_roller.checkForOptical(color) == 1) {
-			m_intake.toggle(true); // THIS USED TO BE FALSE KAIIAA
+		while(true) {
+			if (m_roller.checkForOptical(color) == 1) {
+				m_intake.toggle(true);
+				break;
+			} else if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L2)) {
+				m_intake.toggle(true);
+				break;
+			}
 		}
 	}
 }
