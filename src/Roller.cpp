@@ -81,7 +81,7 @@ bool Roller::checkForOptical(std::string color) {
 
 void Roller::optical_spin(std::string color) {
 	if (color == "b") {
-			if (optical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
+			if (opt~ical_front.get_hue() >= 345 && optical_front.get_hue() <= 360 || optical_front.get_hue() >= 0 && optical_front.get_hue() <= 15 ) {
 				stopRoller();
 				pros::Task::delay(5);
     		} 

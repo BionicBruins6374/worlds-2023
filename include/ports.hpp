@@ -27,7 +27,7 @@ constexpr int8_t INTAKE_RIGHT =  15;
 
 constexpr int8_t ROLLER = 13;
 
-constexpr int8_t CATAPULT_MOTOR = 8;
+constexpr int8_t CATAPULT_MOTOR = 12;
 constexpr uint8_t LIMIT_SWITCH = 'D'; 
 
 constexpr int8_t INERTIAL_1 = 1; // right
