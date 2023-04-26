@@ -142,18 +142,21 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	robot.autonomous_spin(alliance_color);
 	pros::Task::delay(2000);
 	intake.toggle(false);
-	// move backward 
+	// move backward and intake
 	chassis->moveDistance((t-1.5) * -1_ft);
+	intake.toggle(false);
+	pros::Task::delay(2000);
+	intake.toggle(false);
 	//Turns to face goal
-	chassis->turnAngle(-10_deg);
+	chassis->turnAngle(-20_deg);
 	//Shoots cata
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 	cata.spin_motor(0);
 	cata.spin_motor(1);
 	//turn -135 degrees 
-	chassis->turnAngle(-125_deg);
+	chassis->turnAngle(-115_deg);
 	// move to disk (3 stack)
-	chassis->moveDistance(sqrt( (pow((3*t/2),2) + pow((t - r + t/2),2) ) ) * 1_ft);
+	chassis->moveDistance(sqrt((pow((t/2),2) + pow(((1.5*t) - 0.25),2))) * 1_ft);
 	// intake it
 	intake.toggle(false);
 	pros::Task::delay(2000);
