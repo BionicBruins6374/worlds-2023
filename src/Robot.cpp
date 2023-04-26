@@ -9,9 +9,8 @@ Robot::Robot(Drivetrain drivetrain, Intake intake, Expansion expansion, Roller r
 	 {}
 
 void Robot::update_controller() {
-	m_controller_partner.print(1,1, "Intake Motor Temp: %f", m_intake.get_temp());
-	m_controller.print(1,1,"Velocity: %f", m_catapult.get_voltage());
-	std::printf("Velocity: %f", m_catapult.get_voltage());
+	// m_controller_partner.print(1,1, "Intake Motor Temp: %f", m_intake.get_temp());
+	// m_controller.print(1,1,"Velocity: %f", m_catapult.get_voltage());
 }
 
 
@@ -27,7 +26,6 @@ void Robot::update_intake_roller(std::string color) {
 	m_roller.turn_light_on();
 	if (m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_L1)) {
 		m_intake.toggle(false);
-		std::printf("%d\n",m_roller.checkForOptical(color));
 		while(true) {
 			if (m_roller.checkForOptical(color) == 1) {
 				m_intake.toggle(false);
@@ -56,8 +54,11 @@ void Robot::update_intake_roller(std::string color) {
 void Robot::autonomous_spin(std::string color) {
 	m_roller.turn_light_on();
 	m_intake.toggle(false);
+	while (true) {
 	if (m_roller.checkForOptical(color) == 1) {
 		m_intake.toggle(false);
+		break;
+	}
 	}
 }
 

@@ -18,7 +18,7 @@ std::shared_ptr<ChassisController> build_PID (const okapi::MotorGroup left_motor
     std::shared_ptr<IMU> inert2 = std::shared_ptr<IMU>(new IMU(inertial2, okapi::IMUAxes::x));
     
     
-    inert1->calibrate(); inert2->calibrate();    
+    // inert1->calibrate(); inert2->calibrate();    
     return okapi::ChassisControllerBuilder()
         .withMotors(left_motor, right_motor)
         .withDimensions(AbstractMotor::gearset::blue, {{3_in, 12.0_in}, imev5BlueTPR})

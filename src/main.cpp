@@ -70,8 +70,8 @@ void initialize() {
 	lv_label_set_text(setLabel,"Funny");
 
 	
-	// okapi::IMU(ports::INERTIAL_1).calibrate();
-	// okapi::IMU(ports::INERTIAL_2).calibrate();
+	okapi::IMU(ports::INERTIAL_1).calibrate();
+	okapi::IMU(ports::INERTIAL_2).calibrate();
 
 	changeAutonSole = lv_btn_create(lv_scr_act(),NULL);
 	lv_obj_set_free_num(changeAutonSole,1);
@@ -143,6 +143,12 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 	// shoot cata
 
 }
+
+void roller_auton(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
+	chassis->moveDistance(0.5_ft);
+	robot.autonomous_spin(alliance_color);
+}
+
 void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
 	double theta_two = atan( (1.5 * t) / (0.5 * t));
 	// move to roller
