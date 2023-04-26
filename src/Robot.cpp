@@ -62,7 +62,7 @@ void Robot::autonomous_spin(std::string color) {
 }
 
 void Robot::update_expansion() {
-	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) ) {
+	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) || m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) ) {
 		m_expansion.trigger();
 	}
 }
