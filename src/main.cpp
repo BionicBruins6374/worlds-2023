@@ -1,3 +1,5 @@
+#include "okapi/impl/device/rotarysensor/IMU.hpp"
+#include "pros/adi.hpp"
 #include "pros/rtos.hpp"
 #include "Drivetrain.hpp"
 #include "Robot.hpp"
@@ -67,6 +69,10 @@ void initialize() {
 	setLabel = lv_label_create(lv_scr_act(),NULL);
 	lv_label_set_text(setLabel,"Funny");
 
+	
+	// okapi::IMU(ports::INERTIAL_1).calibrate();
+	// okapi::IMU(ports::INERTIAL_2).calibrate();
+
 	changeAutonSole = lv_btn_create(lv_scr_act(),NULL);
 	lv_obj_set_free_num(changeAutonSole,1);
 	lv_btn_set_action(changeAutonSole,LV_BTN_ACTION_CLICK,btn_click_action);
@@ -98,12 +104,13 @@ void opcontrol() {
 	Intake const intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
 	Expansion const expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
 	Roller const roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
-	Catapult const catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
+	Catapult catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
 	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 	
 	while (true) {
 		robot.update(buttonText);
 		pros::Task::delay(1);
+		
 	}
 }
 
@@ -112,6 +119,7 @@ void launch_piston(void* hi) {
 	// pros::ADIDigitalOut pissRight = pros::ADIDigitalOut{ports::EXPANSION_PISTON_RIGHT};
 	pissLeft.set_value(true); 
 }
+
 
 void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	// roller
@@ -159,14 +167,14 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	pros::Task::delay(2000);
 	intake.toggle(false);
 	//moves forward a bit and intakes a disc
-	chassis->moveDistance();
+	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(45_deg);
-	chassis->moveDistance();
+	chassis->moveDistance(t * 1_ft);
 	//move back a bit
-	chassis->moveDistance();
+	chassis->moveDistance(t * 1_ft);
 	//Turn 90 degrees and move forward
 	chassis->turnAngle(90_deg);
-	chassis->moveDistance();
+	chassis->moveDistance(t * 1_ft);
 	//Turn 90 degrees back and intake
 	chassis->turnAngle(-90_deg);
 	chassis->moveDistance((t-1.5) * 1_ft);
@@ -175,10 +183,10 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	pros::Task::delay(2000);
 	intake.toggle(false);
 	//Move back a bit and turn -135 degrees
-	chassis->moveDistance();
+	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(-135_deg);
 	//Move forward until reach mid, then intake
-	chassis->moveDistance();
+	chassis->moveDistance(t * 1_ft);
 
 	intake.toggle(false);
 	pros::Task::delay(2000);
@@ -196,9 +204,8 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 
 }
 
-
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
-	// start facing left if at top
+	
 	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(-90_deg); // clockwise 
 
@@ -206,8 +213,8 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	
 	robot.autonomous_spin(alliance_color); // roller
 	pros::delay(2000);
-
-	chassis->moveDistance((t-1.5) * -1_ft);
+	
+	chassis->moveDistance((t-18) * -1_ft);
 	
 	chassis->turnAngle(-135_deg);
 
@@ -251,7 +258,7 @@ void autonomous() {
 	Intake intake{ ports::INTAKE_LEFT, ports::INTAKE_RIGHT };
 	Expansion expansion{ ports::EXPANSION_PISTON_LEFT, ports::EXPANSION_PISTON_RIGHT};
 	Roller roller { ports::ROLLER, redOrBlue, ports::OPTICAL_SENSOR, ports::OPTICAL_SENSOR_BACK };
-	Catapult catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
+	Catapult  catapult {ports::CATAPULT_MOTOR, ports::LIMIT_SWITCH};
 	Robot robot{ drivetrain, intake, expansion, roller, catapult};
 	pros::Task::delay(1000);	
 
@@ -274,6 +281,7 @@ void autonomous() {
 	std::printf("right back: %f \n", right_back_encoder.get());
 	std::printf("left front: %f \n", left_front_encoder.get());
 	std::printf("right front: %f \n", right_front_encoder.get());
+
 
 	left_front_encoder.reset(); 
 	left_middle_encoder.reset(); 
