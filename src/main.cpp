@@ -29,6 +29,7 @@ lv_obj_t * changeAutonSole;
 lv_obj_t * changeAutonRoller;
 lv_obj_t * changeAutonIndirect;
 lv_obj_t * autonLabel;
+lv_obj_t * susImage;
 char* autonSelect = "i";
 bool redOrBlue = false; //Red is false | Blue is true
 char* buttonText = "r";
@@ -77,24 +78,26 @@ void initialize() {
 	lv_obj_set_free_num(changeAutonSole,1);
 	lv_btn_set_action(changeAutonSole,LV_BTN_ACTION_CLICK,btn_click_action);
 	lv_obj_align(changeAutonSole,NULL,LV_ALIGN_IN_BOTTOM_LEFT,0,0);
-	lv_obj_set_size(changeAutonSole, 200, 50);
+	lv_obj_set_size(changeAutonSole, 100, 50);
 
 
 	changeAutonRoller = lv_btn_create(lv_scr_act(),NULL);
 	lv_obj_set_free_num(changeAutonRoller,2);
 	lv_btn_set_action(changeAutonRoller,LV_BTN_ACTION_CLICK,btn_click_action);
 	lv_obj_align(changeAutonRoller,NULL,LV_ALIGN_IN_BOTTOM_MID,10,0);
-	lv_obj_set_size(changeAutonRoller, 200, 50);
+	lv_obj_set_size(changeAutonRoller, 100, 50);
 
 	changeAutonIndirect = lv_btn_create(lv_scr_act(),NULL);
 	lv_obj_set_free_num(changeAutonIndirect,3);
 	lv_btn_set_action(changeAutonIndirect,LV_BTN_ACTION_CLICK,btn_click_action);
 	lv_obj_align(changeAutonIndirect,NULL,LV_ALIGN_IN_BOTTOM_RIGHT,20,0);
-	lv_obj_set_size(changeAutonIndirect, 200, 50);
+	lv_obj_set_size(changeAutonIndirect, 100, 50);
 
 	autonLabel = lv_label_create(lv_scr_act(),NULL);
 	lv_label_set_text(autonLabel,autonSelect);
 	lv_obj_align(autonLabel,NULL,LV_ALIGN_IN_LEFT_MID,10,0);
+
+	
 }
 
 void disabled() {}
@@ -146,6 +149,7 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 
 void roller_auton(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	chassis->moveDistance(0.5_ft);
+	intake.toggle(false);
 	robot.autonomous_spin(alliance_color);
 }
 
@@ -153,9 +157,8 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	double theta_two = atan( (1.5 * t) / (0.5 * t));
 	// move to roller
 	chassis->moveDistance((t-1.5) * 1_ft);
-	robot.autonomous_spin(alliance_color);
-	pros::Task::delay(2000);
 	intake.toggle(false);
+	robot.autonomous_spin(alliance_color);
 	// move backward and intake
 	chassis->moveDistance((t-1.5) * -1_ft);
 	// Turn to intake disk
@@ -163,7 +166,6 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	pros::Task::delay(500);
 	//Turns to face goal
 	chassis->turnAngle(180_deg);
-	intake.toggle(false);
 
 	//Shoots cata
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
@@ -206,12 +208,12 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
 	
 	chassis->moveDistance(t * 1_ft);
-	chassis->turnAngle(-90_deg); // clockwise 
+	chassis->turnAngle(90_deg); // clockwise 
 
 	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
 	
+	intake.toggle(false);
 	robot.autonomous_spin(alliance_color); // roller
-	pros::delay(2000);
 	
 	chassis->moveDistance((t-18) * -1_ft);
 	
@@ -237,7 +239,7 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	chassis->turnAngle(90_deg); // counter clock 90
 	chassis->moveDistance( (pow(sqrt(0.5 * t),2) + pow(sqrt(0.5 * t),2) ) * 1_ft);
 	
-	// intake
+	// intaker
 	intake.toggle(false);
 	pros::Task::delay(2000);
 	intake.toggle(false);
@@ -292,7 +294,8 @@ void autonomous() {
 
 	// call auton method
 	if (autonSelect == "i") {
-		auton_indirect(chass, roller, catapult,intake, buttonText, robot);
+		roller_auton(chass, roller, catapult,intake, buttonText, robot);
+		// auton_indirect(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "s") {
 		auton_sole(chass, roller, catapult,intake, buttonText, robot);
 	} else if (autonSelect == "r") {

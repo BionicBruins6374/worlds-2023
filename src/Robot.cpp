@@ -66,18 +66,24 @@ void Robot::update_intake_roller(std::string color) {
 
 void Robot::autonomous_spin(std::string color) {
 	m_roller.turn_light_on();
-	m_intake.toggle(false);
-	while (true) {
-	if (m_roller.checkForOptical(color) == 1) {
-		m_intake.toggle(false);
-		break;
-	}
+	const int timeout = 2000;
+    uint32_t start_time = pros::millis();
+	while(true) {
+		if (m_roller.checkForOptical(color) == 1) {
+			m_intake.toggle(false);
+			break;
+		} 
+		if (pros::millis() - start_time > timeout) {
+			m_intake.toggle(false);
+			break;
+		}
+		pros::Task::delay(5);
 	}
 }
 
 void Robot::update_expansion() {
 	if (m_controller_partner.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) || m_controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT) ) {
-		m_expansion.trigger();
+		m_expansion.press_trigger();
 	}
 }
 

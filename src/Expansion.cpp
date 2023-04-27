@@ -9,8 +9,8 @@ Expansion::Expansion(uint8_t const piston_port_left, uint8_t const piston_port_r
 
 
 void Expansion::trigger() {
-	m_piston_left.set_value(false);
-	m_piston_right.set_value(false);
+	m_piston_left.set_value(true);
+	m_piston_right.set_value(true);
 }
 
 void Expansion::trigger(bool state) {
