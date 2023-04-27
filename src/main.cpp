@@ -30,7 +30,7 @@ lv_obj_t * changeAutonRoller;
 lv_obj_t * changeAutonIndirect;
 lv_obj_t * autonLabel;
 lv_obj_t * susImage;
-char* autonSelect = "i";
+char* autonSelect = "r";
 bool redOrBlue = false; //Red is false | Blue is true
 char* buttonText = "r";
 static lv_res_t btn_click_action(lv_obj_t * btn)
@@ -148,22 +148,29 @@ void auton_sole(std::shared_ptr<ChassisController> chassis, Roller roller, Catap
 }
 
 void roller_auton(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
-	chassis->moveDistance(0.5_ft);
 	intake.toggle(false);
+	chassis->moveDistance(0.5_ft);
 	robot.autonomous_spin(alliance_color);
 }
 
 void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {          
 	double theta_two = atan( (1.5 * t) / (0.5 * t));
 	// move to roller
-	chassis->moveDistance((t-1.5) * 1_ft);
 	intake.toggle(false);
+	chassis->moveDistance((t-1.5) * 1_ft);
 	robot.autonomous_spin(alliance_color);
-	// move backward and intake
-	chassis->moveDistance((t-1.5) * -1_ft);
+	// move backward a bit
+	chassis->moveDistance((TILE_LENGTH*0.5) * -1_ft);
 	// Turn to intake disk
-	chassis->turnAngle(180_deg);
+	chassis->turnAngle(-180_deg);
 	pros::Task::delay(500);
+	
+	//Intake disc
+	intake.toggle(false);
+	chassis->moveDistance((TILE_LENGTH*0.5) * -1_ft);
+	pros::delay(2000);
+	intake.toggle(false);
+	/**
 	//Turns to face goal
 	chassis->turnAngle(180_deg);
 
@@ -172,7 +179,7 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	cata.spin_motor(0);
 	cata.spin_motor(1);
 	//turn angle to face 3 stack, ccw
-	chassis->turnAngle( (180.0 - theta_two) * 1_deg);
+	chassis->turnAngle( (180.0 - theta_two) * -1_deg);
 	// move to disk (3 stack)
 	chassis->moveDistance(sqrt(pow(1.5 * t,2)+  pow(0.5 * t, 2)) * 1_ft);
 
@@ -181,28 +188,28 @@ void auton_roller_side(std::shared_ptr<ChassisController> chassis, Roller roller
 	pros::Task::delay(2000);
 	intake.toggle(false);
 
-	chassis->turnAngle(-90_deg); // turn to face high goal
+	chassis->turnAngle(90_deg); // turn to face high goal
 	pros::c::task_create(launch_piston, (void*) "hi" , TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT,  "cata spin");
 	cata.spin_motor(0);
 	cata.spin_motor(1);
 
 	// move angle to 45 deg facing disk
-	chassis->turnAngle((90 + theta_two) * 1_deg); // counter clockwise, don't think this is right
+	chassis->turnAngle((90 + theta_two) * -1_deg); // counter clockwise, don't think this is right
 	chassis->moveDistance((sqrt( 2.0) * 0.25 )* 1_ft) ; //  sqrt(0.5^2 + 0.5^t) = sqrt(2 * 0.5^2)
 
 	intake.toggle(false);
 
-	chassis->turnAngle(-45_deg); // clockwise
+	chassis->turnAngle(45_deg); // clockwise
 	chassis->moveDistance(t * 1_ft); // move to low goal disk
 
-	chassis->turnAngle(-90_deg); // clockwise, turn to intake second disk
+	chassis->turnAngle(90_deg); // clockwise, turn to intake second disk
 	chassis->moveDistance((t - 0.25) * 1_ft) ; // fine tune this distance
 
-	chassis->turnAngle(45_deg) ; // make flywheel face high goal
+	chassis->turnAngle(-45_deg) ; // make flywheel face high goal
 	intake.toggle(false);
 	chassis->moveDistance(sqrt(t * t + pow(1.5 * t, 2)) * ( 1_ft));
 
-
+*/
 }
 
 void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, Catapult cata, Intake intake, std::string alliance_color, Robot robot) {
@@ -210,9 +217,8 @@ void auton_indirect(std::shared_ptr<ChassisController> chassis, Roller roller, C
 	chassis->moveDistance(t * 1_ft);
 	chassis->turnAngle(90_deg); // clockwise 
 
-	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
-	
 	intake.toggle(false);
+	chassis->moveDistance((t-1.5) * 1_ft); // 1.5 is bot length in feet
 	robot.autonomous_spin(alliance_color); // roller
 	
 	chassis->moveDistance((t-18) * -1_ft);

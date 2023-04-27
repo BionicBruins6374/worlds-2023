@@ -66,17 +66,11 @@ void Robot::update_intake_roller(std::string color) {
 
 void Robot::autonomous_spin(std::string color) {
 	m_roller.turn_light_on();
-	const int timeout = 2000;
-    uint32_t start_time = pros::millis();
 	while(true) {
 		if (m_roller.checkForOptical(color) == 1) {
 			m_intake.toggle(false);
 			break;
 		} 
-		if (pros::millis() - start_time > timeout) {
-			m_intake.toggle(false);
-			break;
-		}
 		pros::Task::delay(5);
 	}
 }
